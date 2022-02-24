@@ -136,7 +136,7 @@ int _stat(char *file, struct stat *st)
 	return 0;
 }
 
-int _link(char *old, char *new)
+int _link(char *oldch, char *newch)
 {
 	errno = EMLINK;
 	return -1;
