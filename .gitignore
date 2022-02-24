@@ -1,5 +1,10 @@
-.metadata
+##
+## Eclipce / STM32CubeIDE
+##
 
+.metadata
+Debug
+Release
 
 ##
 ## C/C++
@@ -37,3 +42,4 @@
 *.exe
 *.out
 *.app
+
