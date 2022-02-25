@@ -23,3 +23,13 @@ andrus
 int
 systick
 prefetch
+analogue
+printf
+ex
+rx
+tx
+jabber
+misc
+duplex
+expr
+pendable
