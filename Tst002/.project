@@ -3,6 +3,7 @@
 	<name>Tst002</name>
 	<comment></comment>
 	<projects>
+		<project>Tst002</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

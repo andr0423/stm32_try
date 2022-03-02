@@ -23,8 +23,12 @@
 #include "tim.h"
 #include "gpio.h"
 
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+//#include "bmp280.h"
+#include <MyBlinker.h>
+#include <MySensor.h>
 
 /* USER CODE END Includes */
 
@@ -57,6 +61,9 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+MyBlinker mb = MyBlinker();
+
+
 /* USER CODE END 0 */
 
 /**
@@ -87,10 +94,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_ETH_Init();
+  //MX_ETH_Init();
   MX_I2C1_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
+
+  MySensor ms = MySensor( &hi2c1 );
+
 
   /* USER CODE END 2 */
 
@@ -99,6 +109,15 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+
+	  mb.blue_on();
+
+	  ms.read_data();
+
+	  	  HAL_Delay(500);
+	  mb.blue_off();
+
+	  	  HAL_Delay(1500);
 
     /* USER CODE BEGIN 3 */
   }
@@ -169,8 +188,11 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+  //MyBlinker mb = MyBlinker();
   while (1)
   {
+	  	  HAL_Delay(500);
+	  mb.red_toggle();
   }
   /* USER CODE END Error_Handler_Debug */
 }
