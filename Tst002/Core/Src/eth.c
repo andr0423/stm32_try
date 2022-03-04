@@ -81,13 +81,11 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     /* ETH clock enable */
     __HAL_RCC_ETH_CLK_ENABLE();
 
-    __HAL_RCC_GPIOE_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOG_CLK_ENABLE();
     /**ETH GPIO Configuration
-    PE2     ------> ETH_TXD3
     PC1     ------> ETH_MDC
     PC2     ------> ETH_TXD2
     PC3     ------> ETH_TX_CLK
@@ -101,14 +99,8 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     PB13     ------> ETH_TXD1
     PG11     ------> ETH_TX_EN
     PG13     ------> ETH_TXD0
+    PB8     ------> ETH_TXD3
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_2;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
     GPIO_InitStruct.Pin = RMII_MDC_Pin|GPIO_PIN_2|GPIO_PIN_3|RMII_RXD0_Pin
                           |RMII_RXD1_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -124,7 +116,7 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|RMII_TXD1_Pin;
+    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|RMII_TXD1_Pin|GPIO_PIN_8;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -156,7 +148,6 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* ethHandle)
     __HAL_RCC_ETH_CLK_DISABLE();
 
     /**ETH GPIO Configuration
-    PE2     ------> ETH_TXD3
     PC1     ------> ETH_MDC
     PC2     ------> ETH_TXD2
     PC3     ------> ETH_TX_CLK
@@ -170,15 +161,14 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* ethHandle)
     PB13     ------> ETH_TXD1
     PG11     ------> ETH_TX_EN
     PG13     ------> ETH_TXD0
+    PB8     ------> ETH_TXD3
     */
-    HAL_GPIO_DeInit(GPIOE, GPIO_PIN_2);
-
     HAL_GPIO_DeInit(GPIOC, RMII_MDC_Pin|GPIO_PIN_2|GPIO_PIN_3|RMII_RXD0_Pin
                           |RMII_RXD1_Pin);
 
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_1|RMII_MDIO_Pin|GPIO_PIN_7);
 
-    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_0|GPIO_PIN_1|RMII_TXD1_Pin);
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_0|GPIO_PIN_1|RMII_TXD1_Pin|GPIO_PIN_8);
 
     HAL_GPIO_DeInit(GPIOG, RMII_TX_EN_Pin|RMII_TXD0_Pin);
 

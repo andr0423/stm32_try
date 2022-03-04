@@ -20,6 +20,7 @@
 #include "main.h"
 #include "eth.h"
 #include "i2c.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -97,6 +98,7 @@ int main(void)
   //MX_ETH_Init();
   MX_TIM6_Init();
   MX_I2C2_Init();
+  MX_SPI6_Init();
   /* USER CODE BEGIN 2 */
 
   MySensor ms = MySensor( &hi2c2 );
@@ -188,7 +190,6 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
-  //MyBlinker mb = MyBlinker();
   while (1)
   {
 	  	  HAL_Delay(500);
