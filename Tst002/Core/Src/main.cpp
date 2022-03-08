@@ -23,6 +23,7 @@
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
+#include <string>
 
 
 /* Private includes ----------------------------------------------------------*/
@@ -30,6 +31,9 @@
 //#include "bmp280.h"
 #include <MyBlinker.h>
 #include <MySensor.h>
+#include <MyOled.h>
+
+#include "ssd1306_tests.h"
 
 /* USER CODE END Includes */
 
@@ -63,7 +67,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 MyBlinker mb = MyBlinker();
-
+//MyOled my_oled = MyOled();
 
 /* USER CODE END 0 */
 
@@ -103,6 +107,35 @@ int main(void)
 
   MySensor ms = MySensor( &hi2c2 );
 
+  ssd1306_Init();
+
+  	HAL_Delay(10);
+  ssd1306_Fill(SSD1306_COLOR::White);
+  ssd1306_UpdateScreen();
+
+    HAL_Delay(1000);
+  ssd1306_Fill(SSD1306_COLOR::Black);
+  ssd1306_UpdateScreen();
+
+  //  HAL_Delay(1000);
+  //ssd1306_TestBorder();
+
+  // ------------------------------------------
+
+  char buffer [64];
+  char ch;
+
+  ssd1306_SetCursor(18,16);
+
+  //char txt[] = "Hello!";
+  //ch = ssd1306_WriteString(txt, Font_16x26, SSD1306_COLOR::White);
+  snprintf ( buffer, 64, "Hello!");
+  ch = ssd1306_WriteString( buffer, Font_16x26, SSD1306_COLOR::White );
+  ssd1306_UpdateScreen();
+
+  if ( ! ch ){
+    HAL_Delay(4000);
+  }
 
   /* USER CODE END 2 */
 
@@ -116,10 +149,24 @@ int main(void)
 
 	  ms.read_data();
 
-	  	  HAL_Delay(500);
+	  	  HAL_Delay(10);
+
+	  ssd1306_Fill(SSD1306_COLOR::Black);
+
+	  ssd1306_SetCursor(1,4);
+	  snprintf ( buffer, 64, "Temp:  %3.2f C", ms.temperature );
+	  ch = ssd1306_WriteString( buffer, Font_7x10, SSD1306_COLOR::White );
+
+	  ssd1306_SetCursor(1,20);
+	  snprintf ( buffer, 64, "Pres: %3.2f mm Hg", ms.pressure );
+	  ch = ssd1306_WriteString( buffer, Font_7x10, SSD1306_COLOR::White );
+
+	  ssd1306_UpdateScreen();
+
+	  	  HAL_Delay(390);
 	  mb.blue_off();
 
-	  	  HAL_Delay(1500);
+	  	  HAL_Delay(2600);
 
     /* USER CODE BEGIN 3 */
   }
