@@ -9,12 +9,24 @@
 #define SRC_MYOLED_H_
 
 #include "ssd1306.h"
+#include "ssd1306_tests.h"
+#include <string>
 
 
 
 class MyOled {
+	FontDef * font = &Font_7x10;
+	char buffer [64];
+	char ch;
+
 public:
 	MyOled();
+	void hello();
+	void write_params(float, float, float);
+	void clear();
+	void update();
+	void write_str( uint8_t, uint8_t, const char * );
+	void write_str( uint8_t, uint8_t, const char *, float );
 };
 
 

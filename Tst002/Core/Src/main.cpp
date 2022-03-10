@@ -23,17 +23,15 @@
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
-#include <string>
-
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#include "bmp280.h"
+#include <string>
 #include <MyBlinker.h>
 #include <MySensor.h>
 #include <MyOled.h>
 
-#include "ssd1306_tests.h"
+#include "dht.h"
 
 /* USER CODE END Includes */
 
@@ -66,8 +64,11 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+
+
 MyBlinker mb = MyBlinker();
-//MyOled my_oled = MyOled();
+// MyOled my_oled = MyOled();
+
 
 /* USER CODE END 0 */
 
@@ -103,39 +104,24 @@ int main(void)
   MX_TIM6_Init();
   MX_I2C2_Init();
   MX_SPI6_Init();
+
+  /* Initialize interrupts */
+  //MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
+
+
+  // dht11
+  static DHT_sensor dht_11 = {DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT11, 0};
+  DHT_data himidity_dht;
+
+  // bmp280
   MySensor ms = MySensor( &hi2c2 );
 
-  ssd1306_Init();
+  // 0.96" OLED display init and test
+  MyOled my_oled = MyOled();
 
-  	HAL_Delay(10);
-  ssd1306_Fill(SSD1306_COLOR::White);
-  ssd1306_UpdateScreen();
 
-    HAL_Delay(1000);
-  ssd1306_Fill(SSD1306_COLOR::Black);
-  ssd1306_UpdateScreen();
-
-  //  HAL_Delay(1000);
-  //ssd1306_TestBorder();
-
-  // ------------------------------------------
-
-  char buffer [64];
-  char ch;
-
-  ssd1306_SetCursor(18,16);
-
-  //char txt[] = "Hello!";
-  //ch = ssd1306_WriteString(txt, Font_16x26, SSD1306_COLOR::White);
-  snprintf ( buffer, 64, "Hello!");
-  ch = ssd1306_WriteString( buffer, Font_16x26, SSD1306_COLOR::White );
-  ssd1306_UpdateScreen();
-
-  if ( ! ch ){
-    HAL_Delay(4000);
-  }
 
   /* USER CODE END 2 */
 
@@ -149,24 +135,28 @@ int main(void)
 
 	  ms.read_data();
 
-	  	  HAL_Delay(10);
+	  himidity_dht = DHT_getData(&dht_11);
 
-	  ssd1306_Fill(SSD1306_COLOR::Black);
+	  //	  HAL_Delay(10);
 
-	  ssd1306_SetCursor(1,4);
-	  snprintf ( buffer, 64, "Temp:  %3.2f C", ms.temperature );
-	  ch = ssd1306_WriteString( buffer, Font_7x10, SSD1306_COLOR::White );
+	  my_oled.write_params( ms.temperature, ms.pressure, himidity_dht.hum );
 
-	  ssd1306_SetCursor(1,20);
-	  snprintf ( buffer, 64, "Pres: %3.2f mm Hg", ms.pressure );
-	  ch = ssd1306_WriteString( buffer, Font_7x10, SSD1306_COLOR::White );
+//	  	  HAL_Delay(400);
+//	  mb.blue_off();
+//	        HAL_Delay(2600);
 
-	  ssd1306_UpdateScreen();
-
-	  	  HAL_Delay(390);
-	  mb.blue_off();
-
-	  	  HAL_Delay(2600);
+	  for ( int i = 0 ; i < 300 ; i++ ){
+		  if ( i > 30 ){
+			  mb.blue_off();
+		  }
+		  if( HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin) == GPIO_PIN_SET ){
+			  mb.red_triple();
+			  ssd1306_TestAll();
+			  mb.red_triple();
+			  break;
+		  }
+		  HAL_Delay(10);
+	  }
 
     /* USER CODE BEGIN 3 */
   }
@@ -223,8 +213,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
-/* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
 

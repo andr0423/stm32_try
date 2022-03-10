@@ -11,10 +11,11 @@
 
 MySensor::MySensor( I2C_HandleTypeDef * dev ) {
 
-	this->pressure    = 0;
-	this->pressure_pa = 0;
-	this->temperature = 0;
-	this->humidity    = 0;
+	this->pressure     = 0;
+	this->pressure_pa  = 0;
+	this->temperature  = 0;
+	this->humidity     = 0;
+	this->humidity_dht = 0;  //?
 
 	bmp280_init_default_params( &this->bmp280.params );
 
@@ -44,7 +45,8 @@ bool MySensor::read_data(){
 		HAL_Delay(500);
 	}
 
-	this->pressure = this->pressure_pa * 0.75 / 100; // *100 / 0.75 mm.rt.st
+	// 1 Pa == 100 / 0.75 mm Hg
+	this->pressure = this->pressure_pa * 0.75 / 100;
 
 	return true;
 }

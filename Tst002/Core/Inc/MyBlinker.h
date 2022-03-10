@@ -30,6 +30,7 @@ public:
 	void blue_off();
 	void blue_toggle();
 
+	void red_triple();
 };
 
 

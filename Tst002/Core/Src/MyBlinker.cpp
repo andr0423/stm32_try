@@ -53,4 +53,16 @@ void MyBlinker::blue_toggle(){
 	}
 }
 
-
+void MyBlinker::red_triple(){
+	this->red_toggle();  //1
+	HAL_Delay(200);
+	this->red_toggle();
+	HAL_Delay(200);
+	this->red_toggle();  //2
+	HAL_Delay(200);
+	this->red_toggle();
+	HAL_Delay(200);
+	this->red_toggle();  //3
+	HAL_Delay(200);
+	this->red_toggle();
+}

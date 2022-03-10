@@ -18,12 +18,13 @@
 class MySensor {
 	BMP280_HandleTypedef bmp280;
 	//float    pressure_pa, pressure, temperature, humidity;
+
 	uint16_t size;
 	uint8_t  Data[256];
 	bool     bme280p;  // "BME280" or "BMP280"
 
 public:
-	float    pressure_pa, pressure, temperature, humidity;
+	float    pressure_pa, pressure, temperature, humidity, humidity_dht;
 
 	MySensor( I2C_HandleTypeDef * hi2c1 );
 

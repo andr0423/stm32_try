@@ -6,6 +6,12 @@
 #ifndef __SSD1306_CONF_H__
 #define __SSD1306_CONF_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+
 // Choose a microcontroller family
 //#define STM32F0
 //#define STM32F1
@@ -65,5 +71,11 @@
 // The height can be changed as well if necessary.
 // It can be 32, 64 or 128. The default value is 64.
 // #define SSD1306_HEIGHT          64
+
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __SSD1306_CONF_H__ */
