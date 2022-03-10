@@ -214,6 +214,8 @@ void SystemClock_Config(void)
   }
 }
 
+/* USER CODE BEGIN 4 */
+
 /* USER CODE END 4 */
 
 /**
