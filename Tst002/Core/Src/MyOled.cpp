@@ -9,8 +9,9 @@
 
 
 
-MyOled::MyOled() {
-    this->font = &Font_7x10;
+MyOled::MyOled() {}
+
+void MyOled::init() {
     ssd1306_Init();
     ssd1306_Fill(SSD1306_COLOR::White);
     ssd1306_UpdateScreen();
@@ -19,9 +20,6 @@ MyOled::MyOled() {
     ssd1306_Fill(SSD1306_COLOR::Black);
     ssd1306_UpdateScreen();
     HAL_Delay(500);
-
-    this->hello();
-    HAL_Delay(1000);
 }
 
 void MyOled::hello() {
@@ -37,9 +35,10 @@ void MyOled::hello() {
 		HAL_Delay(8);
 		this->update();
 	}
+    HAL_Delay(1000);
 }
 
-void MyOled::write_params(float tmpr, float prss, float hmdt){
+void MyOled::display_tph(float tmpr, float prss, float hmdt){
 	this->clear();
 	this->write_str( 2,  2, "Temp: % 3.2f C", tmpr );
 	this->write_str( 2, 18, "Pres: %4.2f mm Hg", prss );
@@ -51,6 +50,10 @@ void MyOled::write_params(float tmpr, float prss, float hmdt){
 	this->font = &Font_7x10;
 	ssd1306_Line( 0, 63, 127, 63, SSD1306_COLOR::White );
 	this->update();
+}
+
+void MyOled::display_test() {
+	  ssd1306_TestAll();
 }
 
 void MyOled::clear(){

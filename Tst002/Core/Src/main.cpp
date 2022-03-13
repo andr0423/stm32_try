@@ -67,7 +67,7 @@ void SystemClock_Config(void);
 
 
 MyBlinker mb = MyBlinker();
-// MyOled my_oled = MyOled();
+MyOled my_oled = MyOled();
 
 
 /* USER CODE END 0 */
@@ -112,16 +112,16 @@ int main(void)
 
 
   // dht11
-  static DHT_sensor dht_11 = {DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT11, 0};
+  static DHT_sensor dht_22 = { DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT22, 0 };
   DHT_data himidity_dht;
 
   // bmp280
   MySensor ms = MySensor( &hi2c2 );
 
   // 0.96" OLED display init and test
-  MyOled my_oled = MyOled();
-
-
+  //MyOled my_oled = MyOled();
+  my_oled.init();
+  my_oled.hello();
 
   /* USER CODE END 2 */
 
@@ -135,23 +135,17 @@ int main(void)
 
 	  ms.read_data();
 
-	  himidity_dht = DHT_getData(&dht_11);
+	  himidity_dht = DHT_getData(&dht_22);
 
-	  //	  HAL_Delay(10);
-
-	  my_oled.write_params( ms.temperature, ms.pressure, himidity_dht.hum );
-
-//	  	  HAL_Delay(400);
-//	  mb.blue_off();
-//	        HAL_Delay(2600);
+	  my_oled.display_tph( ms.temperature, ms.pressure, himidity_dht.hum );
 
 	  for ( int i = 0 ; i < 300 ; i++ ){
-		  if ( i > 30 ){
+		  if ( i == 30 ){
 			  mb.blue_off();
 		  }
 		  if( HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin) == GPIO_PIN_SET ){
 			  mb.red_triple();
-			  ssd1306_TestAll();
+			  my_oled.display_test();
 			  mb.red_triple();
 			  break;
 		  }

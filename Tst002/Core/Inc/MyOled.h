@@ -21,8 +21,10 @@ class MyOled {
 
 public:
 	MyOled();
+	void init();
 	void hello();
-	void write_params(float, float, float);
+	void display_tph(float, float, float);
+	void display_test();
 	void clear();
 	void update();
 	void write_str( uint8_t, uint8_t, const char * );
