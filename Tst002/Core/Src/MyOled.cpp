@@ -32,7 +32,7 @@ void MyOled::hello() {
 	this->update();
 	for ( int i = 1 ; i < 127 ; i++ ){
 		ssd1306_Line( i, 49, i, 62, SSD1306_COLOR::White );
-		HAL_Delay(8);
+		HAL_Delay(4);
 		this->update();
 	}
     HAL_Delay(1000);
@@ -41,8 +41,8 @@ void MyOled::hello() {
 void MyOled::display_tph(float tmpr, float prss, float hmdt){
 	this->clear();
 	this->write_str( 2,  2, "Temp: % 3.2f C", tmpr );
-	this->write_str( 2, 18, "Pres: %4.2f mm Hg", prss );
-	this->write_str( 2, 34, "Humd:  % 2.2f %%", hmdt );
+	this->write_str( 2, 18, "Pres:% 4.2f mm Hg", prss );
+	this->write_str( 2, 34, "Humd: % 3.2f %%", hmdt );
 
 	ssd1306_Line( 0, 48, 127, 48, SSD1306_COLOR::White );
 	this->font = &Font_6x8;
