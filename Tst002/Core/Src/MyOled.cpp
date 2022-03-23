@@ -11,6 +11,13 @@
 
 MyOled::MyOled() {}
 
+//void MyOled::clear_buffer(){
+//	for (int i = 0; i < 64; i++){
+//		this->buffer[i] = 0;
+//	}
+//}
+
+
 void MyOled::init() {
     ssd1306_Init();
     ssd1306_Fill(SSD1306_COLOR::White);
@@ -38,22 +45,77 @@ void MyOled::hello() {
     HAL_Delay(1000);
 }
 
-void MyOled::display_tph(float tmpr, float prss, float hmdt){
+void MyOled::next_display(){
+	this->current_display = ( this->current_display + 1 ) % 4 ;
+	this->display();
+}
+
+void MyOled::display(){
 	this->clear();
-	this->write_str( 2,  2, "Temp: % 3.2f C", tmpr );
-	this->write_str( 2, 18, "Pres:% 4.2f mm Hg", prss );
-	this->write_str( 2, 34, "Humd: % 3.2f %%", hmdt );
+	switch(this->current_display)
+	{
+	case 0:
+		this->display_tph();
+		break;
+	case 1:
+		this->display_graph();
+		break;
+	case 2:
+		this->display_conf();
+		break;
+	case 3:
+		this->display_test();
+		break;
+	}
+	this->update();
+}
+
+void MyOled::set_tph(float tmpr, float prss, float hmdt){
+	this->tmpr = tmpr;
+	this->prss = prss;
+	this->hmdt = hmdt;
+}
+
+void MyOled::display_tph(){
+	//this->clear();
+	this->write_str( 2,  2, "Temp: % 3.2f C", this->tmpr );
+	this->write_str( 2, 18, "Pres:% 4.2f mm Hg", this->prss );
+	this->write_str( 2, 34, "Humd: % 3.2f %%", this->hmdt );
 
 	ssd1306_Line( 0, 48, 127, 48, SSD1306_COLOR::White );
 	this->font = &Font_6x8;
 	this->write_str( 4, 52, "VKR c++ DEMYKIN 2022" );
 	this->font = &Font_7x10;
 	ssd1306_Line( 0, 63, 127, 63, SSD1306_COLOR::White );
-	this->update();
+	//this->update();
+}
+
+void MyOled::display_graph(){
+	//this->clear();
+	ssd1306_Line( 0, 15, 127, 15, SSD1306_COLOR::White );
+	ssd1306_Line( 0, 31, 127, 31, SSD1306_COLOR::White );
+	ssd1306_Line( 0, 47, 127, 47, SSD1306_COLOR::White );
+	this->font = &Font_6x8;
+	//this->write_str( 2, 50, "CLICK to next");
+	this->write_str( 2, 52, " %2.1f | %3.1f | %2.1f", this->tmpr, this->prss, this->hmdt );
+	this->font = &Font_7x10;
+	//this->update();
+}
+
+void MyOled::display_conf(){
+	//this->clear();
+	this->write_str( 2,  2, "interval: 3 sec");
+	this->write_str( 2, 18, "remember: 128");
+	this->write_str( 2, 34, "/* example */");
+	this->write_str( 2, 50, "CLICK to next");
+	//this->update();
 }
 
 void MyOled::display_test() {
-	  ssd1306_TestAll();
+	this->font = &Font_16x26;
+	this->write_str( 31, 18, "Test" );
+	this->font = &Font_7x10;
+	  //ssd1306_TestAll();
 }
 
 void MyOled::clear(){
@@ -65,12 +127,18 @@ void MyOled::update(){
 }
 
 void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str){
-	  ssd1306_SetCursor(x, y);
-	  char * str = const_cast<char*>(const_str);
-	  this->ch = ssd1306_WriteString( str, *this->font, SSD1306_COLOR::White );
+    ssd1306_SetCursor(x, y);
+    char * str = const_cast<char*>(const_str);
+    this->ch = ssd1306_WriteString( str, *this->font, SSD1306_COLOR::White );
 }
 
 void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str, float val){
-	  sprintf ( this->buffer, const_str, val );
-	  this->write_str( x, y, this->buffer );
+	sprintf ( this->buffer, const_str, val );
+    this->write_str( x, y, this->buffer );
 }
+
+void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str, float v1, float v2, float v3){
+	sprintf ( this->buffer, const_str, v1, v2, v3 );
+    this->write_str( x, y, this->buffer );
+}
+

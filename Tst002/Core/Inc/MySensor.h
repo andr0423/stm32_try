@@ -23,6 +23,10 @@ class MySensor {
 	uint8_t  Data[256];
 	bool     bme280p;  // "BME280" or "BMP280"
 
+	//vector<float> arr_temp;
+	//vector<float> arr_pres;
+	//vector<float> arr_humi;
+
 public:
 	float    pressure_pa, pressure, temperature, humidity, humidity_dht;
 

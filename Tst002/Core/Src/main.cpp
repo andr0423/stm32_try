@@ -30,6 +30,7 @@
 #include <MyBlinker.h>
 #include <MySensor.h>
 #include <MyOled.h>
+#include <MyButton.h>
 
 #include "dht.h"
 
@@ -123,6 +124,9 @@ int main(void)
   my_oled.init();
   my_oled.hello();
 
+  uint8_t flag_key1_press = 1;
+  uint32_t time_key1_press = 0;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -137,18 +141,29 @@ int main(void)
 
 	  himidity_dht = DHT_getData(&dht_22);
 
-	  my_oled.display_tph( ms.temperature, ms.pressure, himidity_dht.hum );
+	  my_oled.set_tph( ms.temperature, ms.pressure, himidity_dht.hum );
+	  my_oled.display();
 
 	  for ( int i = 0 ; i < 300 ; i++ ){
 		  if ( i == 30 ){
 			  mb.blue_off();
 		  }
-		  if( HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin) == GPIO_PIN_SET ){
-			  mb.red_triple();
-			  my_oled.display_test();
-			  mb.red_triple();
-			  break;
+
+
+		  if(HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin) == GPIO_PIN_SET && flag_key1_press)
+		  {
+		    flag_key1_press = 0;
+
+		    my_oled.next_display();
+
+		    time_key1_press = HAL_GetTick();
 		  }
+
+		  if(!flag_key1_press && (HAL_GetTick() - time_key1_press) > 300)
+		  {
+		    flag_key1_press = 1;
+		  }
+
 		  HAL_Delay(10);
 	  }
 
