@@ -31,6 +31,7 @@
 #include <MySensor.h>
 #include <MyOled.h>
 #include <MyButton.h>
+#include <MyMeasurements.h>
 
 #include "dht.h"
 
@@ -69,6 +70,8 @@ void SystemClock_Config(void);
 
 MyBlinker mb = MyBlinker();
 MyOled my_oled = MyOled();
+MyButton my_btn = MyButton(USR_BTN_GPIO_Port, USR_BTN_Pin);
+
 
 
 /* USER CODE END 0 */
@@ -124,8 +127,8 @@ int main(void)
   my_oled.init();
   my_oled.hello();
 
-  uint8_t flag_key1_press = 1;
-  uint32_t time_key1_press = 0;
+  // measurements
+  MyMeasurements arr = MyMeasurements();
 
   /* USER CODE END 2 */
 
@@ -137,9 +140,10 @@ int main(void)
 
 	  mb.blue_on();
 
-	  ms.read_data();
-
+	  ms.get_data();
 	  himidity_dht = DHT_getData(&dht_22);
+
+	  arr.set( ms.temperature, ms.pressure, himidity_dht.hum );
 
 	  my_oled.set_tph( ms.temperature, ms.pressure, himidity_dht.hum );
 	  my_oled.display();
@@ -149,19 +153,8 @@ int main(void)
 			  mb.blue_off();
 		  }
 
-
-		  if(HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin) == GPIO_PIN_SET && flag_key1_press)
-		  {
-		    flag_key1_press = 0;
-
-		    my_oled.next_display();
-
-		    time_key1_press = HAL_GetTick();
-		  }
-
-		  if(!flag_key1_press && (HAL_GetTick() - time_key1_press) > 300)
-		  {
-		    flag_key1_press = 1;
+		  if ( my_btn.is_Press() ){
+			  my_oled.next_display();
 		  }
 
 		  HAL_Delay(10);

@@ -1,7 +1,7 @@
 /*
  * MySensor.cpp
  *
- *  Created on: 2 mar. 2022 г.
+ *  Created on: 2 mar 2022
  *      Author: andrus
  */
 
@@ -31,7 +31,7 @@ MySensor::MySensor( I2C_HandleTypeDef * dev ) {
 
 }
 
-bool MySensor::read_data(){
+bool MySensor::get_data(){
 
 	while (
 			! bmp280_read_float(

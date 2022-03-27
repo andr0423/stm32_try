@@ -209,3 +209,4 @@ scanline
 делаем
 callbacks
 sec
+destructor

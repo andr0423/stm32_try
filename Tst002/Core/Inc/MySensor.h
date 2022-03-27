@@ -1,7 +1,7 @@
 /*
  * MySensor.h
  *
- *  Created on: 2 mar. 2022 г.
+ *  Created on: 2 mar 2022
  *      Author: andrus
  */
 #ifndef SRC_MYSENSOR_H_
@@ -32,7 +32,7 @@ public:
 
 	MySensor( I2C_HandleTypeDef * hi2c1 );
 
-	bool read_data();
+	bool get_data();
 
 };
 
