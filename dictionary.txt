@@ -210,3 +210,17 @@ scanline
 callbacks
 sec
 destructor
+cpsid
+cpsie
+enum
+netif
+netifs
+netmask
+gw
+initilialize
+llink
+devnum
+nop
+irq
+fd
+len

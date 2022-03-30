@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : main.c
+  * @file           : main.cpp
   * @brief          : Main program body
   ******************************************************************************
   * @attention
@@ -18,8 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "eth.h"
 #include "i2c.h"
+#include "lwip.h"
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
@@ -55,6 +55,11 @@
 
 /* USER CODE BEGIN PV */
 
+// EXAMPLE
+extern struct netif gnetif;
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,7 +73,7 @@ void SystemClock_Config(void);
 
 
 
-MyBlinker mb = MyBlinker();
+MyBlinker mb = MyBlinker();  // TODO constructor get pin
 MyOled my_oled = MyOled();
 MyButton my_btn = MyButton(USR_BTN_GPIO_Port, USR_BTN_Pin);
 
@@ -104,16 +109,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  //MX_ETH_Init();
   MX_TIM6_Init();
   MX_I2C2_Init();
   MX_SPI6_Init();
-
-  /* Initialize interrupts */
-  //MX_NVIC_Init();
+  MX_LWIP_Init();
   /* USER CODE BEGIN 2 */
 
-
+  // check error red blinker, NB: irq will disabled, sleep not worked, use stupid loop
+  // Error_Handler();
 
   // dht11
   static DHT_sensor dht_22 = { DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT22, 0 };
@@ -130,6 +133,11 @@ int main(void)
   // measurements
   MyMeasurements arr = MyMeasurements();
 
+  uint32_t prev_step;
+  uint32_t next_step;
+  uint32_t delta_step;
+  uint32_t sleep_step = 3000;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -137,6 +145,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+
+	  prev_step = HAL_GetTick();
 
 	  mb.blue_on();
 
@@ -148,8 +158,8 @@ int main(void)
 	  my_oled.set_tph( ms.temperature, ms.pressure, himidity_dht.hum );
 	  my_oled.display();
 
-	  for ( int i = 0 ; i < 300 ; i++ ){
-		  if ( i == 30 ){
+	  for ( uint32_t i = 0 ; i < sleep_step ; i++ ){
+		  if ( i == 250 ){
 			  mb.blue_off();
 		  }
 
@@ -157,8 +167,35 @@ int main(void)
 			  my_oled.next_display();
 		  }
 
-		  HAL_Delay(10);
+		  HAL_Delay(1);
+
+		  // EXAMPLE
+		  ethernetif_input(&gnetif);
+		  sys_check_timeouts();
+
 	  }
+
+	  next_step = HAL_GetTick();
+	  delta_step = next_step - prev_step;
+
+	  if (  2900 < delta_step && delta_step < 3100 ){
+		  continue;
+	  }
+
+
+	  if      ( 3100 < delta_step && delta_step < 3401 ){
+		  sleep_step -= 20;
+	  }
+	  else if ( 3400 < delta_step && delta_step < 10000 ){
+	  		  sleep_step -= 200;
+	  }
+	  else if ( 2500 < delta_step && delta_step < 2900 ){
+		  sleep_step += 20;
+	  }
+	  else if      ( 400 < delta_step && delta_step < 2501 ){
+		  sleep_step += 200;
+	  }
+
 
     /* USER CODE BEGIN 3 */
   }
@@ -231,8 +268,11 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
-	  	  HAL_Delay(500);
-	  mb.red_toggle();
+    for( int i = 0 ; i < 4194304 ; i+=2 ){
+        i--;
+    }
+    mb.red_toggle();
+
   }
   /* USER CODE END Error_Handler_Debug */
 }

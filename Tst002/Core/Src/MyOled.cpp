@@ -39,7 +39,7 @@ void MyOled::hello() {
 	this->update();
 	for ( int i = 1 ; i < 127 ; i++ ){
 		ssd1306_Line( i, 49, i, 62, SSD1306_COLOR::White );
-		HAL_Delay(4);
+		HAL_Delay(3);
 		this->update();
 	}
     HAL_Delay(1000);
@@ -112,18 +112,18 @@ void MyOled::display_conf(){
 }
 
 void MyOled::display_test() {
-	this->font = &Font_16x26;
-	this->write_str( 31, 18, "Test" );
-	this->font = &Font_7x10;
-	  //ssd1306_TestAll();
+    this->font = &Font_16x26;
+    this->write_str( 31, 18, "Test" );
+    this->font = &Font_7x10;
+    //ssd1306_TestAll();
 }
 
 void MyOled::clear(){
-	ssd1306_Fill(SSD1306_COLOR::Black);
+    ssd1306_Fill(SSD1306_COLOR::Black);
 }
 
 void MyOled::update(){
-	ssd1306_UpdateScreen();
+    ssd1306_UpdateScreen();
 }
 
 void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str){
@@ -133,12 +133,12 @@ void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str){
 }
 
 void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str, float val){
-	sprintf ( this->buffer, const_str, val );
+    sprintf ( this->buffer, const_str, val );
     this->write_str( x, y, this->buffer );
 }
 
 void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str, float v1, float v2, float v3){
-	sprintf ( this->buffer, const_str, v1, v2, v3 );
+    sprintf ( this->buffer, const_str, v1, v2, v3 );
     this->write_str( x, y, this->buffer );
 }
 
