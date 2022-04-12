@@ -64,6 +64,7 @@ extern struct netif gnetif;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -113,6 +114,9 @@ int main(void)
   MX_I2C2_Init();
   MX_SPI6_Init();
   MX_LWIP_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
   // check error red blinker, NB: irq will disabled, sleep not worked, use stupid loop
@@ -136,7 +140,7 @@ int main(void)
   uint32_t prev_step;
   uint32_t next_step;
   uint32_t delta_step;
-  uint32_t sleep_step = 3000;
+  uint32_t sleep_step = 2400; // 3000;
 
   /* USER CODE END 2 */
 
@@ -147,8 +151,9 @@ int main(void)
     /* USER CODE END WHILE */
 
 	  prev_step = HAL_GetTick();
+	  mb.blue_toggle();
 
-	  mb.blue_on();
+	  //mb.blue_on();
 
 	  ms.get_data();
 	  himidity_dht = DHT_getData(&dht_22);
@@ -159,13 +164,6 @@ int main(void)
 	  my_oled.display();
 
 	  for ( uint32_t i = 0 ; i < sleep_step ; i++ ){
-		  if ( i == 250 ){
-			  mb.blue_off();
-		  }
-
-		  if ( my_btn.is_Press() ){
-			  my_oled.next_display();
-		  }
 
 		  HAL_Delay(1);
 
@@ -253,7 +251,28 @@ void SystemClock_Config(void)
   }
 }
 
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* EXTI15_10_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+}
+
 /* USER CODE BEGIN 4 */
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+
+  if ( my_btn.is_Press() ){
+    //mb.red_toggle();
+    my_oled.next_display();
+  }
+
+}
 
 /* USER CODE END 4 */
 

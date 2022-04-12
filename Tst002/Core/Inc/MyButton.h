@@ -16,16 +16,16 @@ class MyButton {
 	GPIO_TypeDef * port;
 	uint16_t pin;
 
-	uint8_t flag_key_press = 1;
-	uint32_t time_key_press = 0;
+	// uint8_t flag_key_release = 0;
+	// uint32_t time_key_release = 0;
+	// uint8_t flag_key_press = 1;
 
-	uint8_t flag_key_release = 0;
-	uint32_t time_key_release = 0;
+	uint32_t time_key_press = 0;
 
 	bool is_pressed = false;
 	bool is_released = false;
-	//bool is_dbl;
-	//bool is_long;
+	// bool is_dbl = false;
+	// bool is_long = false;
 
 public:
 	MyButton( GPIO_TypeDef * port, uint16_t pin );

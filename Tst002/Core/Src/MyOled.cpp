@@ -105,7 +105,7 @@ void MyOled::display_graph(){
 void MyOled::display_conf(){
 	//this->clear();
 	this->write_str( 2,  2, "interval: 3 sec");
-	this->write_str( 2, 18, "remember: 128");
+	this->write_str( 2, 18, "192.168.100.200");
 	this->write_str( 2, 34, "/* example */");
 	this->write_str( 2, 50, "CLICK to next");
 	//this->update();
