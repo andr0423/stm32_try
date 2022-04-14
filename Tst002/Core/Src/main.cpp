@@ -55,7 +55,7 @@
 
 /* USER CODE BEGIN PV */
 
-// EXAMPLE
+
 extern struct netif gnetif;
 
 
@@ -77,6 +77,10 @@ static void MX_NVIC_Init(void);
 MyBlinker mb = MyBlinker();  // TODO constructor get pin
 MyOled my_oled = MyOled();
 MyButton my_btn = MyButton(USR_BTN_GPIO_Port, USR_BTN_Pin);
+MySensor ms = MySensor();
+DHT_sensor dht_22;
+
+//bool first_start = true;
 
 
 
@@ -119,28 +123,27 @@ int main(void)
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
-  // check error red blinker, NB: irq will disabled, sleep not worked, use stupid loop
-  // Error_Handler();
+
 
   // dht11
-  static DHT_sensor dht_22 = { DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT22, 0 };
-  DHT_data himidity_dht;
+  dht_22 = { DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT22, 0 };
 
-  // bmp280
-  MySensor ms = MySensor( &hi2c2 );
+  // bmp280/bme280
+  ms.set_bmp( &hi2c2 );
+  ms.set_dht( &dht_22 );
 
   // 0.96" OLED display init and test
-  //MyOled my_oled = MyOled();
   my_oled.init();
   my_oled.hello();
 
   // measurements
   MyMeasurements arr = MyMeasurements();
 
-  uint32_t prev_step;
-  uint32_t next_step;
-  uint32_t delta_step;
-  uint32_t sleep_step = 2400; // 3000;
+
+
+  HAL_TIM_Base_Start_IT(&htim6);
+
+
 
   /* USER CODE END 2 */
 
@@ -150,49 +153,8 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
-	  prev_step = HAL_GetTick();
-	  mb.blue_toggle();
-
-	  //mb.blue_on();
-
-	  ms.get_data();
-	  himidity_dht = DHT_getData(&dht_22);
-
-	  arr.set( ms.temperature, ms.pressure, himidity_dht.hum );
-
-	  my_oled.set_tph( ms.temperature, ms.pressure, himidity_dht.hum );
-	  my_oled.display();
-
-	  for ( uint32_t i = 0 ; i < sleep_step ; i++ ){
-
-		  HAL_Delay(1);
-
-		  // EXAMPLE
-		  ethernetif_input(&gnetif);
-		  sys_check_timeouts();
-
-	  }
-
-	  next_step = HAL_GetTick();
-	  delta_step = next_step - prev_step;
-
-	  if (  2900 < delta_step && delta_step < 3100 ){
-		  continue;
-	  }
-
-
-	  if      ( 3100 < delta_step && delta_step < 3401 ){
-		  sleep_step -= 20;
-	  }
-	  else if ( 3400 < delta_step && delta_step < 10000 ){
-	  		  sleep_step -= 200;
-	  }
-	  else if ( 2500 < delta_step && delta_step < 2900 ){
-		  sleep_step += 20;
-	  }
-	  else if      ( 400 < delta_step && delta_step < 2501 ){
-		  sleep_step += 200;
-	  }
+	ethernetif_input(&gnetif);
+	sys_check_timeouts();
 
 
     /* USER CODE BEGIN 3 */
@@ -266,12 +228,30 @@ static void MX_NVIC_Init(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-
   if ( my_btn.is_Press() ){
-    //mb.red_toggle();
     my_oled.next_display();
   }
+}
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if(htim->Instance == TIM6) //check if the interrupt comes from TIM1
+	{
+//		if (first_start){
+//			first_start = false;
+//			return;
+//		}
+
+		mb.blue_toggle();
+
+		ms.get_data();
+
+		my_oled.set_tph( ms.temperature, ms.pressure, ms.humidity_dht );
+
+		my_oled.display();
+
+
+	}
 }
 
 /* USER CODE END 4 */

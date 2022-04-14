@@ -1,7 +1,11 @@
 
-
+dt = $(shell date +%s)
 
 test_send:
+	@# terminal 1
+	mosquitto_pub -h localhost -t test -m '{"t": 20.00, "p": 765.00, "h": 50.00, "date": $(dt) }'
+
+test_hello:
 	@# terminal 1
 	mosquitto_pub -h localhost -t test -m "Hello, Mosquitto"
 

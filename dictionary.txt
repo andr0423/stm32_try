@@ -225,3 +225,10 @@ irq
 fd
 len
 ip
+deinit
+ms
+&dht
+&dht
+ethernetif
+lwip
+dht

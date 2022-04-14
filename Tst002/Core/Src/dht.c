@@ -65,8 +65,15 @@ DHT_data DHT_getData(DHT_sensor *sensor) {
 	goToOutput(sensor);
 	// Опускание линии данных на 15 мс
 	lineDown();
-	Delay(15);
-	// Подъём линии, перевод порта "на вход"
+
+
+	//Delay(15);  // TODO detect period, need ~15ms; why HAL_Delay not worked?
+    for( int i = 0 ; i < 5000 ; i+=2 ){
+        i--;
+    }
+
+
+    // Подъём линии, перевод порта "на вход"
 	lineUp();
 	goToInput(sensor);
 	

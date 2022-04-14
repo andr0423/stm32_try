@@ -11,26 +11,32 @@
 
 #include "main.h"
 #include "bmp280.h"
+#include "dht.h"
 
 
 
 
 class MySensor {
 	BMP280_HandleTypedef bmp280;
-	//float    pressure_pa, pressure, temperature, humidity;
 
 	uint16_t size;
 	uint8_t  Data[256];
 	bool     bme280p;  // "BME280" or "BMP280"
 
-	//vector<float> arr_temp;
-	//vector<float> arr_pres;
-	//vector<float> arr_humi;
+	bool use_dht = false;
+	DHT_sensor * dht;
+
+
+	void init_var();
 
 public:
-	float    pressure_pa, pressure, temperature, humidity, humidity_dht;
+	float    pressure_pa, pressure, temperature, humidity, temperature_dht, humidity_dht;
 
-	MySensor( I2C_HandleTypeDef * hi2c1 );
+	MySensor();
+	MySensor( I2C_HandleTypeDef *  );
+
+	void set_bmp( I2C_HandleTypeDef * );
+	void set_dht( DHT_sensor * );
 
 	bool get_data();
 
