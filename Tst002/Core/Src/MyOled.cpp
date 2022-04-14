@@ -77,7 +77,6 @@ void MyOled::set_tph(float tmpr, float prss, float hmdt){
 }
 
 void MyOled::display_tph(){
-	//this->clear();
 	this->write_str( 2,  2, "Temp: % 3.2f C", this->tmpr );
 	this->write_str( 2, 18, "Pres:% 4.2f mm Hg", this->prss );
 	this->write_str( 2, 34, "Humd: % 3.2f %%", this->hmdt );
@@ -87,7 +86,6 @@ void MyOled::display_tph(){
 	this->write_str( 4, 52, "VKR c++ DEMYKIN 2022" );
 	this->font = &Font_7x10;
 	ssd1306_Line( 0, 63, 127, 63, SSD1306_COLOR::White );
-	//this->update();
 }
 
 void MyOled::display_graph(){
@@ -97,18 +95,18 @@ void MyOled::display_graph(){
 	ssd1306_Line( 0, 47, 127, 47, SSD1306_COLOR::White );
 	this->font = &Font_6x8;
 	//this->write_str( 2, 50, "CLICK to next");
-	this->write_str( 2, 52, " %2.1f | %3.1f | %2.1f", this->tmpr, this->prss, this->hmdt );
+	this->write_str( 2, 52, "%2.2f  %3.2f  %2.2f", this->tmpr, this->prss, this->hmdt );
 	this->font = &Font_7x10;
-	//this->update();
 }
 
 void MyOled::display_conf(){
-	//this->clear();
-	this->write_str( 2,  2, "interval: 3 sec");
-	this->write_str( 2, 18, "192.168.100.200");
-	this->write_str( 2, 34, "/* example */");
+	this->font = &Font_6x8;
+	this->write_str( 2,  2, "IoT device:");
+	this->write_str( 2, 14, "    192.168.100.200");
+	this->write_str( 2, 26, "mqtt-bocker:");
+	this->write_str( 2, 38, "    192.168.100.100");
+	this->font = &Font_7x10;
 	this->write_str( 2, 50, "CLICK to next");
-	//this->update();
 }
 
 void MyOled::display_test() {

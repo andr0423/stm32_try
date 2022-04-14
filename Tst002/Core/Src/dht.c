@@ -68,7 +68,7 @@ DHT_data DHT_getData(DHT_sensor *sensor) {
 
 
 	//Delay(15);  // TODO detect period, need ~15ms; why HAL_Delay not worked?
-    for( int i = 0 ; i < 5000 ; i+=2 ){
+    for( int i = 0 ; i < 50000 ; i+=2 ){
         i--;
     }
 

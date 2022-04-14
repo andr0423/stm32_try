@@ -77,10 +77,10 @@ static void MX_NVIC_Init(void);
 MyBlinker mb = MyBlinker();  // TODO constructor get pin
 MyOled my_oled = MyOled();
 MyButton my_btn = MyButton(USR_BTN_GPIO_Port, USR_BTN_Pin);
-MySensor ms = MySensor();
+MySensor ms;
 DHT_sensor dht_22;
 
-//bool first_start = true;
+bool first_start = true;
 
 
 
@@ -129,6 +129,7 @@ int main(void)
   dht_22 = { DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT22, 0 };
 
   // bmp280/bme280
+  ms = MySensor();
   ms.set_bmp( &hi2c2 );
   ms.set_dht( &dht_22 );
 
@@ -142,6 +143,8 @@ int main(void)
 
 
   HAL_TIM_Base_Start_IT(&htim6);
+
+  first_start = false;
 
 
 
@@ -228,7 +231,7 @@ static void MX_NVIC_Init(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if ( my_btn.is_Press() ){
+  if ( !first_start && my_btn.is_Press() ){
     my_oled.next_display();
   }
 }
@@ -237,10 +240,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim->Instance == TIM6) //check if the interrupt comes from TIM1
 	{
-//		if (first_start){
-//			first_start = false;
-//			return;
-//		}
 
 		mb.blue_toggle();
 
@@ -249,7 +248,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		my_oled.set_tph( ms.temperature, ms.pressure, ms.humidity_dht );
 
 		my_oled.display();
-
 
 	}
 }
