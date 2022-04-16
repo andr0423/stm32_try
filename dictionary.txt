@@ -232,3 +232,4 @@ ms
 ethernetif
 lwip
 dht
+apr

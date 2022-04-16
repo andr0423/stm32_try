@@ -7,7 +7,7 @@ extern "C" {
 
 
 
-#include "main.h"
+#include "stm32f7xx_hal.h"
 
 /* Настройки */
 #define DHT_TIMEOUT                     10000   // Количество итераций, после которых функция вернёт пустые значения

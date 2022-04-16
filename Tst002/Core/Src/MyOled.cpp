@@ -39,7 +39,7 @@ void MyOled::hello() {
 	this->update();
 	for ( int i = 1 ; i < 127 ; i++ ){
 		ssd1306_Line( i, 49, i, 62, SSD1306_COLOR::White );
-		HAL_Delay(3);
+		HAL_Delay(2);
 		this->update();
 	}
     HAL_Delay(1000);
@@ -51,6 +51,9 @@ void MyOled::next_display(){
 }
 
 void MyOled::display(){
+	if (this->testing){
+		return;
+	}
 	this->clear();
 	switch(this->current_display)
 	{
@@ -113,7 +116,14 @@ void MyOled::display_test() {
     this->font = &Font_16x26;
     this->write_str( 31, 18, "Test" );
     this->font = &Font_7x10;
-    //ssd1306_TestAll();
+}
+
+void MyOled::oled_testing() {
+	this->testing = true;
+	this->clear();
+    ssd1306_TestAll();
+    this->display();
+    this->testing = false;
 }
 
 void MyOled::clear(){

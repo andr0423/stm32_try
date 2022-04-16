@@ -32,6 +32,7 @@
 #include <MyOled.h>
 #include <MyButton.h>
 #include <MyMeasurements.h>
+#include <MyMqtt.h>
 
 #include "dht.h"
 
@@ -81,7 +82,7 @@ MySensor ms;
 DHT_sensor dht_22;
 
 bool first_start = true;
-
+bool oled_test_start = false;
 
 
 /* USER CODE END 0 */
@@ -103,7 +104,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+  /* USER CODE END Inoled_testingit */
 
   /* Configure the system clock */
   SystemClock_Config();
@@ -142,9 +143,9 @@ int main(void)
 
 
 
-  HAL_TIM_Base_Start_IT(&htim6);
-
   first_start = false;
+
+  HAL_TIM_Base_Start_IT(&htim6);
 
 
 
@@ -159,6 +160,10 @@ int main(void)
 	ethernetif_input(&gnetif);
 	sys_check_timeouts();
 
+	if (oled_test_start){
+		oled_test_start = false;
+		my_oled.oled_testing();
+	}
 
     /* USER CODE BEGIN 3 */
   }
@@ -234,6 +239,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if ( !first_start && my_btn.is_Press() ){
     my_oled.next_display();
   }
+  if ( first_start && my_btn.is_Press() ){
+	  oled_test_start = true;
+	  //first_start = false;
+  }
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -249,6 +258,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		my_oled.display();
 
+		//first_start = false;
 	}
 }
 
@@ -265,7 +275,7 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
-    for( int i = 0 ; i < 4194304 ; i+=2 ){
+    for( int i = 0 ; i < 2700000 ; i+=2 ){
         i--;
     }
     mb.red_toggle();

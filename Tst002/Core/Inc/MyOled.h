@@ -22,6 +22,7 @@ class MyOled {
 	float tmpr;
 	float prss;
 	float hmdt;
+	bool testing = false;
 
 	//void clear_buffer();
 
@@ -42,6 +43,7 @@ public:
 	void display_conf();
 
 	void display_test();
+	void oled_testing();
 
 	void clear();
 	void update();
