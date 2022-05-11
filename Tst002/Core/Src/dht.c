@@ -65,17 +65,7 @@ DHT_data DHT_getData(DHT_sensor *sensor) {
 	goToOutput(sensor);
 	// Опускание линии данных на 15 мс
 	lineDown();
-
-
-
-	//Delay(15);
-
-	// TODO Interval 15ms ~96000
-	// TODO why HAL_Delay() worked in main.cpp but not worked inside class?
-    for( int i = 0 ; i < 96000 ; i++ ){}
-
-
-
+	Delay(15);
     // Подъём линии, перевод порта "на вход"
 	lineUp();
 	goToInput(sensor);

@@ -45,8 +45,27 @@ void MyOled::hello() {
     HAL_Delay(1000);
 }
 
+int MyOled::get_display(){
+	return this->current_display;
+}
+
+void MyOled::set_display( int display ){
+	this->current_display = display % 4 ;
+	this->display();
+}
+
 void MyOled::next_display(){
 	this->current_display = ( this->current_display + 1 ) % 4 ;
+	this->display();
+}
+
+void MyOled::prev_display(){
+	if ( this->current_display > 0) {
+		this->current_display = this->current_display - 1;
+	}
+	else{
+		this->current_display = 3;
+	}
 	this->display();
 }
 
@@ -121,7 +140,9 @@ void MyOled::display_test() {
 void MyOled::oled_testing() {
 	this->testing = true;
 	this->clear();
-    ssd1306_TestAll();
+    // ssd1306_TestAll();
+    ssd1306_Init();
+    ssd1306_TestRectangle();
     this->display();
     this->testing = false;
 }

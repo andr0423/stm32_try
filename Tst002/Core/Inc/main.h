@@ -57,7 +57,7 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define MY_PERIOD 6000
+#define MY_PERIOD 3000
 #define MY_PRESCALER 107999
 #define USR_BTN_Pin GPIO_PIN_13
 #define USR_BTN_GPIO_Port GPIOC

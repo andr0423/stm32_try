@@ -57,6 +57,7 @@
 /* USER CODE BEGIN PV */
 
 
+
 extern struct netif gnetif;
 
 
@@ -81,8 +82,6 @@ MyButton my_btn = MyButton(USR_BTN_GPIO_Port, USR_BTN_Pin);
 MySensor ms;
 DHT_sensor dht_22;
 
-bool first_start = true;
-bool oled_test_start = false;
 
 
 /* USER CODE END 0 */
@@ -143,8 +142,6 @@ int main(void)
 
 
 
-  first_start = false;
-
   HAL_TIM_Base_Start_IT(&htim6);
 
 
@@ -159,11 +156,6 @@ int main(void)
 
 	ethernetif_input(&gnetif);
 	sys_check_timeouts();
-
-	if (oled_test_start){
-		oled_test_start = false;
-		my_oled.oled_testing();
-	}
 
     /* USER CODE BEGIN 3 */
   }
@@ -228,7 +220,7 @@ void SystemClock_Config(void)
 static void MX_NVIC_Init(void)
 {
   /* EXTI15_10_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
@@ -236,13 +228,28 @@ static void MX_NVIC_Init(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if ( !first_start && my_btn.is_Press() ){
-    my_oled.next_display();
-  }
-  if ( first_start && my_btn.is_Press() ){
-	  oled_test_start = true;
-	  //first_start = false;
-  }
+	my_btn.catch_click();
+
+	if ( my_btn.is_Click() ){
+
+
+		if ( my_btn.is_Short() )
+		{
+			my_oled.next_display();
+		}
+		else if ( my_btn.is_Middle() )
+		{
+			my_oled.prev_display();
+		}
+		else if ( my_btn.is_Long() )
+		{
+			if ( my_oled.get_display() == 3 ){
+				my_oled.oled_testing();
+			}
+		}
+
+		my_btn.clean();
+	}
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -258,7 +265,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		my_oled.display();
 
-		//first_start = false;
 	}
 }
 

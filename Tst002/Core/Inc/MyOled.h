@@ -31,7 +31,10 @@ public:
 	void init();
 	void hello();
 
+	int get_display();
+	void set_display(int);
 	void next_display();
+	void prev_display();
 
 	void display();
 
