@@ -26,6 +26,7 @@ def on_message(client, userdata, msg):
         sql = f'insert into mqtt ("t", "p", "h", "date") values({j["t"]},{j["p"]},{j["h"]},{dt})'
         cur.execute(sql)
         con.commit()
+        print('Ok')
     except JSONDecodeError:
         print("Incorrect msg format")
     except Exception:
@@ -36,7 +37,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 client.connect("127.0.0.1")
-client.subscribe("test")
+client.subscribe("vkr_topic")
 
 client.loop_forever()
 

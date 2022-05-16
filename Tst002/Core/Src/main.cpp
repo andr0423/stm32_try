@@ -36,10 +36,18 @@
 
 #include "dht.h"
 
+//mqtt
+#include <mqtt.h>
+#include <MyMqtt.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
+//mqtt
+ip_addr_t ip_addr;
+mqtt_client_t *client;
 
 /* USER CODE END PTD */
 
@@ -59,6 +67,10 @@
 
 
 extern struct netif gnetif;
+
+static bool ready_flag = false;
+static bool mesurement_flag = false;
+//static bool ethernet_flag = false;
 
 
 
@@ -146,6 +158,21 @@ int main(void)
 
 
 
+  // mqtt
+  static const char mqtt_server[13] ={'1','9','2', '.', '1','6','8' , '.' , '0' , '.' , '1','0','4'};
+
+  client = mqtt_client_new();
+  ipaddr_aton(mqtt_server,&ip_addr);
+
+  if(client != NULL) {
+	MX_LWIP_Process();  // ??
+	example_do_connect(client);
+    MX_LWIP_Process();  // ??
+  }
+
+
+  ready_flag = true;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -154,8 +181,35 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
-	ethernetif_input(&gnetif);
-	sys_check_timeouts();
+	MX_LWIP_Process();
+
+	if (mesurement_flag)
+	{
+		mesurement_flag = false;
+
+		mb.blue_toggle();
+		mb.red_on();
+
+		ms.get_data();
+		my_oled.set_tph( ms.temperature, ms.pressure, ms.humidity_dht );
+		my_oled.display();
+
+//		if ( ! mqtt_client_is_connected( client ) ){
+//			MX_LWIP_Process();
+//			example_do_connect(client);
+//			MX_LWIP_Process();
+//		}
+		MX_LWIP_Process();
+		example_publish(client, NULL, &ms.temperature, &ms.pressure, &ms.humidity_dht );
+		MX_LWIP_Process();
+
+		example_do_connect(client);
+		MX_LWIP_Process();
+
+
+
+		mb.red_off();
+	}
 
     /* USER CODE BEGIN 3 */
   }
@@ -230,7 +284,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	my_btn.catch_click();
 
-	if ( my_btn.is_Click() ){
+	if ( ready_flag && my_btn.is_Click() ){  // ready_flag false until super circle
 
 
 		if ( my_btn.is_Short() )
@@ -256,15 +310,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim->Instance == TIM6) //check if the interrupt comes from TIM1
 	{
-
-		mb.blue_toggle();
-
-		ms.get_data();
-
-		my_oled.set_tph( ms.temperature, ms.pressure, ms.humidity_dht );
-
-		my_oled.display();
-
+		mesurement_flag = true;
 	}
 }
 
@@ -276,7 +322,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
+  /* USER CODE BEGINrror_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)

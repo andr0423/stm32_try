@@ -19,4 +19,10 @@ Init agent file here:
 Config file here:
   /usr/local/etc/mosquitto/mosquitto.conf
 
+Add/set to config
+
+ max_keepalive 0
+ listener 1883 0.0.0.0
+ log_dest file /usr/local/var/mosquitto/mosquitto.log
+ allow_anonymous true
 

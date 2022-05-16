@@ -54,11 +54,21 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
+// need interval 6 sec
+//
+// SysTic   = 216 000 000 GHz
+// prescale 16bit < 65536
+// 4 timer ticks per 1 ms
+// prescale = 53999
+//
+// period = 6 * 1000 * 4 = 12000
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define MY_PERIOD 3000
-#define MY_PRESCALER 107999
+#define MY_PERIOD 12000
+#define MY_PRESCALER 53999
+#define MY_VERSION 202205160055
 #define USR_BTN_Pin GPIO_PIN_13
 #define USR_BTN_GPIO_Port GPIOC
 #define USR_BTN_EXTI_IRQn EXTI15_10_IRQn

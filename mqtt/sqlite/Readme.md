@@ -5,7 +5,7 @@ Create file
 
 Open database and create table
 
- sqlite mqttlite.sqlite
+ sqlite mqtt.sqlite
 
  create table mqtt ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "t" float , "p" float, "h" float, "date" int);
  
@@ -13,4 +13,4 @@ Open database and create table
  
  select * from mqtt;
 
-
+ select * from mqtt where id > (select max(id) from mqtt) - 10;

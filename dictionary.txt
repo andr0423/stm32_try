@@ -234,3 +234,8 @@ lwip
 dht
 apr
 prv
+mqtt
+crappy
+payload
+tic
+prescale

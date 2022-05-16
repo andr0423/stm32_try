@@ -39,7 +39,7 @@ void MyOled::hello() {
 	this->update();
 	for ( int i = 1 ; i < 127 ; i++ ){
 		ssd1306_Line( i, 49, i, 62, SSD1306_COLOR::White );
-		HAL_Delay(2);
+		HAL_Delay(3);
 		this->update();
 	}
     HAL_Delay(1000);
