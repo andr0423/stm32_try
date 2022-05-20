@@ -16,8 +16,6 @@
 
 
 
-
-
 static void mqtt_pub_request_cb(void *arg, err_t result)
 {
   if(result != ERR_OK) {
@@ -48,8 +46,6 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
   }
 }
 
-
-
 void example_do_connect(mqtt_client_t *client)
 {
   struct mqtt_connect_client_info_t ci;
@@ -73,7 +69,6 @@ void example_do_connect(mqtt_client_t *client)
   }
 }
 
-
 void example_publish(mqtt_client_t * client, void * arg, float * t, float * p, float * h)
 {
   size_t sz = 35;
@@ -94,12 +89,6 @@ void example_publish(mqtt_client_t * client, void * arg, float * t, float * p, f
 
   mqtt_disconnect(client);
 }
-
-
-
-
-
-
 
 
 

@@ -45,9 +45,13 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+
+
 //mqtt
 ip_addr_t ip_addr;
 mqtt_client_t *client;
+
+
 
 /* USER CODE END PTD */
 
@@ -68,9 +72,13 @@ mqtt_client_t *client;
 
 extern struct netif gnetif;
 
+const char mqtt_server[15] = MY_MQTT_SERVER_IP_ADDRES;
+extern uint8_t IP_ADDRESS[4];
+extern uint8_t NETMASK_ADDRESS[4];
+extern uint8_t GATEWAY_ADDRESS[4];
+
 static bool ready_flag = false;
 static bool mesurement_flag = false;
-//static bool ethernet_flag = false;
 
 
 
@@ -78,6 +86,7 @@ static bool mesurement_flag = false;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MPU_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -109,13 +118,22 @@ int main(void)
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
+  MPU_Config();
+
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
+
+  /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* USER CODE BEGIN Init */
 
-  /* USER CODE END Inoled_testingit */
+  /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
@@ -152,26 +170,36 @@ int main(void)
   // measurements
   MyMeasurements arr = MyMeasurements();
 
+  // mqtt
+  client = mqtt_client_new();
+  ipaddr_aton( mqtt_server, &ip_addr );
+
+  if(client != NULL) {
+	example_do_connect(client);
+  }
+
+  ready_flag = true;
+
 
 
   HAL_TIM_Base_Start_IT(&htim6);
 
 
 
-  // mqtt
-  static const char mqtt_server[13] ={'1','9','2', '.', '1','6','8' , '.' , '0' , '.' , '1','0','4'};
+  //
+  //  Try to fix ETHERNET - OK!
+  //
+  //  as
+  //    https://www.programmersought.com/article/78154544894/
+  //
+  //  also I want to read this "Михаил: Включите D-кэш! Без него LWIP не хочет работать. За одно и I-кэш тоже..."
+  //   https://github.com/AnielShri/STM32H745_Ethernet/blob/master/Documentation/lwip_nortos.md
+  //
+  //  an this
+  //    https://github.com/AnielShri/STM32H745_Ethernet/blob/master/Documentation/lwip_nortos.md
+  //
 
-  client = mqtt_client_new();
-  ipaddr_aton(mqtt_server,&ip_addr);
 
-  if(client != NULL) {
-	MX_LWIP_Process();  // ??
-	example_do_connect(client);
-    MX_LWIP_Process();  // ??
-  }
-
-
-  ready_flag = true;
 
   /* USER CODE END 2 */
 
@@ -187,26 +215,15 @@ int main(void)
 	{
 		mesurement_flag = false;
 
-		mb.blue_toggle();
 		mb.red_on();
+		mb.blue_toggle();
 
 		ms.get_data();
 		my_oled.set_tph( ms.temperature, ms.pressure, ms.humidity_dht );
 		my_oled.display();
 
-//		if ( ! mqtt_client_is_connected( client ) ){
-//			MX_LWIP_Process();
-//			example_do_connect(client);
-//			MX_LWIP_Process();
-//		}
-		MX_LWIP_Process();
 		example_publish(client, NULL, &ms.temperature, &ms.pressure, &ms.humidity_dht );
-		MX_LWIP_Process();
-
 		example_do_connect(client);
-		MX_LWIP_Process();
-
-
 
 		mb.red_off();
 	}
@@ -273,9 +290,15 @@ void SystemClock_Config(void)
   */
 static void MX_NVIC_Init(void)
 {
-  /* EXTI15_10_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 3, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+	  /* EXTI15_10_IRQn interrupt configuration */
+	  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 4, 0);
+	  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+	  /* ETH_IRQn interrupt configuration */
+	  HAL_NVIC_SetPriority(ETH_IRQn, 2, 0);
+	  HAL_NVIC_EnableIRQ(ETH_IRQn);
+	  /* TIM6_DAC_IRQn interrupt configuration */
+	  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 3, 0);
+	  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
@@ -315,6 +338,43 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 }
 
 /* USER CODE END 4 */
+
+/* MPU Configuration */
+
+void MPU_Config(void)
+{
+  MPU_Region_InitTypeDef MPU_InitStruct = {0};
+
+  /* Disables the MPU */
+  HAL_MPU_Disable();
+  /** Initializes and configures the Region and the memory to be protected
+  */
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+  MPU_InitStruct.BaseAddress = 0x30040000;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_256B;
+  MPU_InitStruct.SubRegionDisable = 0x0;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_BUFFERABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+  /** Initializes and configures the Region and the memory to be protected
+  */
+  MPU_InitStruct.Number = MPU_REGION_NUMBER1;
+  MPU_InitStruct.BaseAddress = 0x3004400;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_16KB;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+  /* Enables the MPU */
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

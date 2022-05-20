@@ -170,6 +170,9 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* ethHandle)
 
     HAL_GPIO_DeInit(GPIOG, RMII_TX_EN_Pin|RMII_TXD0_Pin);
 
+    /* Peripheral interrupt Deinit*/
+    HAL_NVIC_DisableIRQ(ETH_IRQn);
+
   /* USER CODE BEGIN ETH_MspDeInit 1 */
 
   /* USER CODE END ETH_MspDeInit 1 */
@@ -732,6 +735,17 @@ __weak void ethernetif_notify_conn_changed(struct netif *netif)
   /* NOTE : This is function could be implemented in user file
             when the callback is needed,
   */
+
+	if(netif_is_link_up(netif))
+	{
+		printf("net link is up\r\n");
+		netif_set_up(netif);    // or  netif_set_link_up ???
+	}
+	else
+	{
+		printf("net link is down\r\n");
+		netif_set_link_down(netif);   // or netif_set_down ??
+	}
 
 }
 /* USER CODE END 8 */

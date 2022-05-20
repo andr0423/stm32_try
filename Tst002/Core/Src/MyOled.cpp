@@ -60,7 +60,7 @@ void MyOled::next_display(){
 }
 
 void MyOled::prev_display(){
-	if ( this->current_display > 0) {
+	if ( this->current_display > 0 ) {
 		this->current_display = this->current_display - 1;
 	}
 	else{
@@ -116,19 +116,23 @@ void MyOled::display_graph(){
 	ssd1306_Line( 0, 31, 127, 31, SSD1306_COLOR::White );
 	ssd1306_Line( 0, 47, 127, 47, SSD1306_COLOR::White );
 	this->font = &Font_6x8;
-	//this->write_str( 2, 50, "CLICK to next");
 	this->write_str( 2, 52, "%2.2f  %3.2f  %2.2f", this->tmpr, this->prss, this->hmdt );
 	this->font = &Font_7x10;
 }
 
 void MyOled::display_conf(){
 	this->font = &Font_6x8;
-	this->write_str( 2,  2, "IoT device:");
-	this->write_str( 2, 14, "    192.168.100.200");
+	this->write_str( 2,  2, "IoT device:" );
+
+	sprintf ( this->buffer, "    %03d.%03d.%03d.%03d", IP_ADDRESS[0], IP_ADDRESS[1], IP_ADDRESS[2], IP_ADDRESS[3] );
+	this->write_str( 2, 14, this->buffer );
+
 	this->write_str( 2, 26, "mqtt-bocker:");
-	this->write_str( 2, 38, "    192.168.100.100");
+	sprintf ( this->buffer, "    %s", mqtt_server );
+	this->write_str( 2, 38, this->buffer );
+
 	this->font = &Font_7x10;
-	this->write_str( 2, 50, "CLICK to next");
+	this->write_str( 2, 50, "CLICK to next" );
 }
 
 void MyOled::display_test() {
@@ -140,11 +144,12 @@ void MyOled::display_test() {
 void MyOled::oled_testing() {
 	this->testing = true;
 	this->clear();
-    // ssd1306_TestAll();
-    ssd1306_Init();
-    ssd1306_TestRectangle();
+    ssd1306_TestAll();
+    //ssd1306_Init();
+    //ssd1306_TestRectangle();
     this->display();
     this->testing = false;
+	this->clear();
 }
 
 void MyOled::clear(){
@@ -155,18 +160,18 @@ void MyOled::update(){
     ssd1306_UpdateScreen();
 }
 
-void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str){
-    ssd1306_SetCursor(x, y);
+void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str ){
+    ssd1306_SetCursor( x, y );
     char * str = const_cast<char*>(const_str);
     this->ch = ssd1306_WriteString( str, *this->font, SSD1306_COLOR::White );
 }
 
-void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str, float val){
+void MyOled::write_str( uint8_t x, uint8_t y, const char * const_str, float val ){
     sprintf ( this->buffer, const_str, val );
     this->write_str( x, y, this->buffer );
 }
 
-void MyOled::write_str(uint8_t x, uint8_t y, const char * const_str, float v1, float v2, float v3){
+void MyOled::write_str( uint8_t x, uint8_t y, const char * const_str, float v1, float v2, float v3 ){
     sprintf ( this->buffer, const_str, v1, v2, v3 );
     this->write_str( x, y, this->buffer );
 }

@@ -42,6 +42,12 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 
+
+
+extern const char mqtt_ip[15];
+
+
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -66,9 +72,9 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define MY_PERIOD 12000
+#define MY_PERIOD 24000
+#define MY_VERSION 202205200257
 #define MY_PRESCALER 53999
-#define MY_VERSION 202205160055
 #define USR_BTN_Pin GPIO_PIN_13
 #define USR_BTN_GPIO_Port GPIOC
 #define USR_BTN_EXTI_IRQn EXTI15_10_IRQn
@@ -111,6 +117,27 @@ void Error_Handler(void);
 #define LD2_Pin GPIO_PIN_7
 #define LD2_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
+
+//
+// My IP configurations
+//
+
+#define MY_MQTT_SERVER_IP_ADDRES { '1','9','2', '.', '1','6','8' , '.', '1','0','0' , '.' , '1','0','0' }
+
+#define MY_IP_ADDR_0  192
+#define MY_IP_ADDR_1  168
+#define MY_IP_ADDR_2  100
+#define MY_IP_ADDR_3  200
+
+#define MY_NETMASK_0  255
+#define MY_NETMASK_1  255
+#define MY_NETMASK_2  255
+#define MY_NETMASK_3  0
+
+#define MY_GATEWAY_0  192
+#define MY_GATEWAY_1  168
+#define MY_GATEWAY_2  100
+#define MY_GATEWAY_3  1
 
 /* USER CODE END Private defines */
 

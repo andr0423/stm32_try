@@ -14,6 +14,11 @@
 
 
 
+extern const char mqtt_server[15];
+extern uint8_t IP_ADDRESS[4];
+
+
+
 class MyOled {
 	FontDef * font = &Font_7x10;
 	char buffer [64];
