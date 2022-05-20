@@ -1,17 +1,29 @@
-Create sqlite3 database first.
+Sqlite3 DB
+==========
+
+Create sqlite3 database
+-----------------------
+
 Create file
 
- touch mqtt.sqlite
+ > touch mqtt.sqlite
 
 Open database and create table
 
- sqlite mqtt.sqlite
+ > sqlite mqtt.sqlite  
 
- create table mqtt ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "t" float , "p" float, "h" float, "date" int);
+ > create table mqtt ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "t" float , "p" float, "h" float, "date" int);  
 
- insert into mqtt ("t","p","h","date")  values(02, 0.2, 0.2, 125);
+Insert into table
 
- select * from mqtt;
+ > insert into mqtt ("t","p","h","date")  values( 0.2, 0.2, 0.2, 1234567890123 );  
 
- select * from mqtt where id > (select max(id) from mqtt) - 10;
+Show table
+
+ > select * from mqtt;  
+
+Select last 10 rows
+
+ > select * from mqtt where id > (select max(id) from mqtt) - 10;  
+
 

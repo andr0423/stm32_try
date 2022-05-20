@@ -1,28 +1,27 @@
+Use Mosquittto on MacOS
+=======================
 
+Use **"brew"** for **MacOS**
 
+ > brew search  mosquitto  
+ > brew install mosquitto  
 
-
-==== MAC ====
-
-Use "brew" for MacOS
-
-brew search  mosquitto
-brew install mosquitto
-
-brew serives status
-brew services start mosquitto
-brew services stop  mosquitto
+ > brew serives status  
+ > brew services start mosquitto  
+ > brew services stop  mosquitto  
 
 Init agent file here:
-  ~/Library/LaunchAgents/homebrew.mxcl.mosquitto.plist
+
+ > ~/Library/LaunchAgents/homebrew.mxcl.mosquitto.plist  
 
 Config file here:
-  /usr/local/etc/mosquitto/mosquitto.conf
+
+ > /usr/local/etc/mosquitto/mosquitto.conf  
 
 Add/set to config
 
- max_keepalive 0
- listener 1883 0.0.0.0
- log_dest file /usr/local/var/mosquitto/mosquitto.log
- allow_anonymous true
+ > max_keepalive 0  
+ > listener 1883 0.0.0.0  
+ > log_dest file /usr/local/var/mosquitto/mosquitto.log  
+ > allow_anonymous true  
 
