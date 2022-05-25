@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : main.cpp
+  * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
   * @attention
@@ -26,19 +26,19 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <string>
-#include <MyBlinker.h>
-#include <MySensor.h>
-#include <MyOled.h>
-#include <MyButton.h>
-#include <MyMeasurements.h>
-#include <MyMqtt.h>
 
-#include "dht.h"
 
-//mqtt
-#include <mqtt.h>
-#include <MyMqtt.h>
+
+
+
+
+
+
+
+
+
+
+
 
 /* USER CODE END Includes */
 
@@ -47,9 +47,9 @@
 
 
 
-//mqtt
-ip_addr_t ip_addr;
-mqtt_client_t *client;
+
+
+
 
 
 
@@ -70,15 +70,15 @@ mqtt_client_t *client;
 
 
 
-extern struct netif gnetif;
 
-const char mqtt_server[15] = MY_MQTT_SERVER_IP_ADDRES;
-extern uint8_t IP_ADDRESS[4];
-extern uint8_t NETMASK_ADDRESS[4];
-extern uint8_t GATEWAY_ADDRESS[4];
 
-static bool ready_flag = false;
-static bool mesurement_flag = false;
+
+
+
+
+
+
+
 
 
 
@@ -97,11 +97,11 @@ static void MX_NVIC_Init(void);
 
 
 
-MyBlinker mb = MyBlinker();  // TODO constructor get pin
-MyOled my_oled = MyOled();
-MyButton my_btn = MyButton(USR_BTN_GPIO_Port, USR_BTN_Pin);
-MySensor ms;
-DHT_sensor dht_22;
+
+
+
+
+
 
 
 
@@ -117,7 +117,7 @@ int main(void)
 
   /* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+  /* MPU Configuration--------------------------------------------------------*/
   MPU_Config();
 
   /* Enable I-Cache---------------------------------------------------------*/
@@ -155,49 +155,49 @@ int main(void)
 
 
 
-  // dht11
-  dht_22 = { DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT22, 0 };
-
-  // bmp280/bme280
-  ms = MySensor();
-  ms.set_bmp( &hi2c2 );
-  ms.set_dht( &dht_22 );
-
-  // 0.96" OLED display init and test
-  my_oled.init();
-  my_oled.hello();
-
-  // measurements
-  MyMeasurements arr = MyMeasurements();
-
-  // mqtt
-  client = mqtt_client_new();
-  ipaddr_aton( mqtt_server, &ip_addr );
-
-  if(client != NULL) {
-	example_do_connect(client);
-  }
-
-  ready_flag = true;
 
 
 
-  HAL_TIM_Base_Start_IT(&htim6);
 
 
 
-  //
-  //  Try to fix ETHERNET - OK!
-  //
-  //  as
-  //    https://www.programmersought.com/article/78154544894/
-  //
-  //  also I want to read this "Михаил: Включите D-кэш! Без него LWIP не хочет работать. За одно и I-кэш тоже..."
-  //    https://narodstream.ru/stm-urok-96-lan8720-lwip-tcp-client-chast-2/
-  //
-  //  an this
-  //    https://github.com/AnielShri/STM32H745_Ethernet/blob/master/Documentation/lwip_nortos.md
-  //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -208,25 +208,6 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
-	MX_LWIP_Process();
-
-	if (mesurement_flag)
-	{
-		mesurement_flag = false;
-
-		mb.red_on();
-		mb.blue_toggle();
-
-		ms.get_data();
-		my_oled.set_tph( ms.temperature, ms.pressure, ms.humidity_dht );
-		my_oled.display();
-
-		example_publish(client, NULL, &ms.temperature, &ms.pressure, &ms.humidity_dht );
-		example_do_connect(client);
-
-		mb.red_off();
-	}
 
     /* USER CODE BEGIN 3 */
   }
@@ -246,6 +227,7 @@ void SystemClock_Config(void)
   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -263,12 +245,14 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Activate the Over-Drive mode
   */
   if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -290,52 +274,52 @@ void SystemClock_Config(void)
   */
 static void MX_NVIC_Init(void)
 {
-	  /* EXTI15_10_IRQn interrupt configuration */
-	  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 4, 0);
-	  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-	  /* ETH_IRQn interrupt configuration */
-	  HAL_NVIC_SetPriority(ETH_IRQn, 2, 0);
-	  HAL_NVIC_EnableIRQ(ETH_IRQn);
-	  /* TIM6_DAC_IRQn interrupt configuration */
-	  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 3, 0);
-	  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+  /* EXTI15_10_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 4, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  /* ETH_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(ETH_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(ETH_IRQn);
+  /* TIM6_DAC_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 3, 0);
+  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	my_btn.catch_click();
-
-	if ( ready_flag && my_btn.is_Click() ){  // ready_flag false until super circle
 
 
-		if ( my_btn.is_Short() )
-		{
-			my_oled.next_display();
-		}
-		else if ( my_btn.is_Middle() )
-		{
-			my_oled.prev_display();
-		}
-		else if ( my_btn.is_Long() )
-		{
-			if ( my_oled.get_display() == 3 ){
-				my_oled.oled_testing();
-			}
-		}
 
-		my_btn.clean();
-	}
-}
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	if(htim->Instance == TIM6) //check if the interrupt comes from TIM1
-	{
-		mesurement_flag = true;
-	}
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* USER CODE END 4 */
 
@@ -347,6 +331,7 @@ void MPU_Config(void)
 
   /* Disables the MPU */
   HAL_MPU_Disable();
+
   /** Initializes and configures the Region and the memory to be protected
   */
   MPU_InitStruct.Enable = MPU_REGION_ENABLE;
@@ -362,6 +347,7 @@ void MPU_Config(void)
   MPU_InitStruct.IsBufferable = MPU_ACCESS_BUFFERABLE;
 
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
   /** Initializes and configures the Region and the memory to be protected
   */
   MPU_InitStruct.Number = MPU_REGION_NUMBER1;
@@ -382,15 +368,15 @@ void MPU_Config(void)
   */
 void Error_Handler(void)
 {
-  /* USER CODE BEGINrror_Handler_Debug */
+  /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
   {
-    for( int i = 0 ; i < 2700000 ; i+=2 ){
-        i--;
-    }
-    mb.red_toggle();
+
+
+
+
 
   }
   /* USER CODE END Error_Handler_Debug */
@@ -412,4 +398,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
