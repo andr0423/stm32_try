@@ -13,8 +13,7 @@ test_catch:
 	@# terminal 2
 	mosquitto_sub -h localhost -t vkr_topic
 
-show_conf:
-	cat /usr/local/etc/mosquitto/mosquitto.conf | grep -vE '^#|^$$'
+
 
 SQLITE_DB=../../sqlite/mqtt.sqlite
 
@@ -22,24 +21,29 @@ sql:
 	sqlite3 --box -header $(SQLITE_DB) 'select * from mqtt where id > (select max(id) from mqtt) -10 ;'
 	sqlite3 --column -header $(SQLITE_DB) 'select count(id) as "COUNT" from mqtt;'
 
-drop_sql:
+sql_drop:
 	sqlite3 $(SQLITE_DB) 'delete from mqtt;'
 	rm -f $(SQLITE_DB)
 
-create_sql:
+sql_create:
 	touch ../../sqlite/mqtt.sqlite
 	sqlite3 ../../sqlite/mqtt.sqlite 'create table mqtt ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "t" float , "p" float, "h" float, "date" int);'
 
-start:
+sql_clean: sql_drop sql_create
+
+
+mosquitto_start:
 	@echo Start mosquitto
 	brew services start mosquitto
 
-stop:
+mosquitto_stop:
 	@echo Stop mosquitto
 	@brew services stop mosquitto
 
-status:
+mosquitto_status:
 	@echo Status mosquitto
 	@(brew services | grep -E '^Name|^mosquitto')
 
+mosquitto_conf_show:
+	cat /usr/local/etc/mosquitto/mosquitto.conf | grep -vE '^#|^$$'
 
