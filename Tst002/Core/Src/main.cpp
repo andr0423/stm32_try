@@ -27,7 +27,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <string>
-#include <MyBlinker.h>
 #include <MySensor.h>
 #include <MyOled.h>
 #include <MyButton.h>
@@ -38,6 +37,7 @@
 
 //mqtt
 #include <mqtt.h>
+#include <MyBlinker.h>
 #include <MyMqtt.h>
 
 /* USER CODE END Includes */
@@ -49,7 +49,9 @@
 
 //mqtt
 ip_addr_t ip_addr;
-mqtt_client_t *client;
+mqtt_client_t * client;
+
+extern struct netif gnetif;
 
 
 
@@ -69,8 +71,6 @@ mqtt_client_t *client;
 /* USER CODE BEGIN PV */
 
 
-
-extern struct netif gnetif;
 
 const char mqtt_server[15] = MY_MQTT_SERVER_IP_ADDRES;
 extern uint8_t IP_ADDRESS[4];
@@ -97,7 +97,10 @@ static void MX_NVIC_Init(void);
 
 
 
-MyBlinker mb = MyBlinker();  // TODO constructor get pin
+MyBlinker mb_blue = MyBlinker(LD2_Pin);
+MyBlinker mb_red = MyBlinker(LD3_Pin);
+
+
 MyOled my_oled = MyOled();
 MyButton my_btn = MyButton(USR_BTN_GPIO_Port, USR_BTN_Pin);
 MySensor ms;
@@ -215,8 +218,8 @@ int main(void)
 	{
 		mesurement_flag = false;
 
-		mb.red_on();
-		mb.blue_toggle();
+		mb_red.on();
+		mb_blue.toggle();
 
 		ms.get_data();
 		my_oled.set_tph( ms.temperature, ms.pressure, ms.humidity_dht );
@@ -225,7 +228,7 @@ int main(void)
 		example_publish(client, NULL, &ms.temperature, &ms.pressure, &ms.humidity_dht );
 		example_do_connect(client);
 
-		mb.red_off();
+		mb_red.off();
 	}
 
     /* USER CODE BEGIN 3 */
@@ -392,7 +395,7 @@ void Error_Handler(void)
     for( int i = 0 ; i < 2700000 ; i+=2 ){
         i--;
     }
-    mb.red_toggle();
+    mb_red.toggle();
 
   }
   /* USER CODE END Error_Handler_Debug */

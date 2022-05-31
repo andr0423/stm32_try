@@ -10,8 +10,6 @@
 
 #include "main.h"
 
-
-
 class MyButton {
 	GPIO_TypeDef * port;
 	uint16_t pin;
@@ -32,19 +30,14 @@ class MyButton {
 	bool is_middle = false;
 	bool is_long = false;
 
- // bool is_dbl = false;
-
 public:
 	MyButton( GPIO_TypeDef * port, uint16_t pin );
 	void catch_click();
 	void clean();
-
 	bool is_Click();
 	bool is_Short();
 	bool is_Middle();
 	bool is_Long();
- // bool is_Dbl();
-
 };
 
 #endif /* SRC_MYBUTTON_H_ */
