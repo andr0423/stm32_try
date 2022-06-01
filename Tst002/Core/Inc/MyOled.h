@@ -57,3 +57,4 @@ public:
 };
 
 #endif /* SRC_MYOLED_H_ */
+

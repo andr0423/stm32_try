@@ -11,19 +11,18 @@
 #include "main.h"
 #include <deque>
 
-
-
 class MyMeasurements {
-	int depth = 128;
-	std::deque <float> temperature;
-	std::deque <float> pressure;
-	std::deque <float> humidity;
+  int depth = 128;
+  std::deque<float> temperature;
+  std::deque<float> pressure;
+  std::deque<float> humidity;
 
 public:
-	MyMeasurements();
-	virtual ~MyMeasurements();
-	void set(float, float, float);
+  MyMeasurements();
+  virtual ~MyMeasurements();
+  void set(float, float, float);
 
 };
 
 #endif /* SRC_MYMEASUREMENTS_H_ */
+

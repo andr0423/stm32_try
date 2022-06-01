@@ -15,20 +15,17 @@ extern "C" {
 #include <mqtt.h>
 #include <string.h>
 
-
-
 extern ip_addr_t ip_addr;
 
 void example_do_connect(mqtt_client_t *client);
 
-void example_publish(mqtt_client_t *client, void *arg, float * t, float * p, float * h);
-
-
+void example_publish(mqtt_client_t *client, void *arg, float *t, float *p,
+    float *h);
 
 class MyMqtt {
 public:
-	MyMqtt();
-	void send();
+  MyMqtt();
+  void send();
 };
 
 #ifdef __cplusplus
@@ -36,3 +33,4 @@ public:
 #endif
 
 #endif /* SRC_MYMQTT_H_ */
+

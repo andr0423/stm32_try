@@ -395,6 +395,7 @@ void Error_Handler(void)
     for( int i = 0 ; i < 2700000 ; i+=2 ){
         i--;
     }
+
     mb_red.toggle();
 
   }

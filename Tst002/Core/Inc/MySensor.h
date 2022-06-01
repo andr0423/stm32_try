@@ -29,10 +29,10 @@ public:
   float temperature_dht;
   float humidity_dht;
   MySensor();
-  MySensor(I2C_HandleTypeDef*);
   void set_bmp(I2C_HandleTypeDef*);
   void set_dht(DHT_sensor*);
   bool get_data();
 };
 
 #endif /* SRC_MYSENSOR_H_ */
+

@@ -11,11 +11,6 @@ MySensor::MySensor() {
   this->init_var();
 }
 
-MySensor::MySensor(I2C_HandleTypeDef *dev) {
-  this->init_var();
-  this->set_bmp(dev);
-}
-
 void MySensor::init_var() {
   this->pressure = 0;
   this->pressure_pa = 0;
@@ -29,7 +24,7 @@ void MySensor::set_bmp(I2C_HandleTypeDef *bmp) {
   bmp280_init_default_params(&this->bmp280.params);
 
   this->bmp280.addr = BMP280_I2C_ADDRESS_0;
-  //this->bmp280.addr = BMP280_I2C_ADDRESS_1;
+//this->bmp280.addr = BMP280_I2C_ADDRESS_1;
 
   this->bmp280.i2c = bmp;
 
@@ -64,3 +59,4 @@ bool MySensor::get_data() {
 
   return true;
 }
+

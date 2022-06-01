@@ -7,7 +7,8 @@
 
 #include "MyOled.h"
 
-MyOled::MyOled() {}
+MyOled::MyOled() {
+}
 
 //void MyOled::clear_buffer(){
 //	for (int i = 0; i < 64; i++){
