@@ -5,6 +5,7 @@
 .metadata
 Debug
 Release
+mqtt.sqlite
 
 ##
 ## C/C++

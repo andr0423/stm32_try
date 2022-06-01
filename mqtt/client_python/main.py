@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from json import JSONDecodeError
 
 import paho.mqtt.client as mqtt
