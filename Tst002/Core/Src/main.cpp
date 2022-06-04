@@ -279,10 +279,11 @@ static void MX_NVIC_Init(void) {
 /* USER CODE BEGIN 4 */
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-  my_btn.catch_click();
 
-  if (ready_flag && my_btn.is_Click()) {  // ready_flag false until super circle
+  //my_btn.catch_click();
+  //if (ready_flag && my_btn.is_Click()) {  // ready_flag false until super circle
 
+  if (ready_flag && my_btn.catch_click()) {
     if (my_btn.is_Short()) {
       my_oled.next_display();
     } else if (my_btn.is_Middle()) {
@@ -293,7 +294,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
       }
     }
 
-    my_btn.clean();
+    //my_btn.clean();  --> is it overkill ?
   }
 }
 
