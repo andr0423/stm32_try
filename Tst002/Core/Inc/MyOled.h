@@ -25,6 +25,17 @@ class MyOled {
   float hmdt;
   bool testing = false;
 
+  void clear();
+  void update();
+  void write_str(uint8_t, uint8_t, const char*);
+  void write_str(uint8_t, uint8_t, const char*, float);
+  void write_str(uint8_t, uint8_t, const char*, float, float, float);
+
+  void display_tph();
+  void display_graph();
+  void display_conf();
+  void display_test();
+
   //void clear_buffer();
 
 public:
@@ -36,24 +47,10 @@ public:
   void set_display(int);
   void next_display();
   void prev_display();
-
   void display();
-
   void set_tph(float, float, float);
-  void display_tph();
-
-  void display_graph();
-
-  void display_conf();
-
-  void display_test();
   void oled_testing();
 
-  void clear();
-  void update();
-  void write_str(uint8_t, uint8_t, const char*);
-  void write_str(uint8_t, uint8_t, const char*, float);
-  void write_str(uint8_t, uint8_t, const char*, float, float, float);
 };
 
 #endif /* SRC_MYOLED_H_ */

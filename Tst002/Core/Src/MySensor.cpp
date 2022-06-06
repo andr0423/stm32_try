@@ -39,7 +39,7 @@ void MySensor::set_dht(DHT_sensor *dht) {
   this->dht = dht;
 }
 
-bool MySensor::get_data() {
+void MySensor::get_data() {
 
   while (!bmp280_read_float(&this->bmp280, &this->temperature,
       &this->pressure_pa,
@@ -56,7 +56,5 @@ bool MySensor::get_data() {
     this->humidity_dht = d.hum;
     this->temperature_dht = d.temp;
   }
-
-  return true;
 }
 
