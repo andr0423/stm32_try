@@ -14,8 +14,6 @@
 
 class MySensor {
   BMP280_HandleTypedef bmp280;
-  uint16_t size;
-  uint8_t Data[256];
   bool bme280p;  // "BME280" or "BMP280"
   bool use_dht = false;
   DHT_sensor *dht;
@@ -31,7 +29,7 @@ public:
   MySensor();
   void set_bmp(I2C_HandleTypeDef*);
   void set_dht(DHT_sensor*);
-  bool get_data();
+  void get_data();
 };
 
 #endif /* SRC_MYSENSOR_H_ */

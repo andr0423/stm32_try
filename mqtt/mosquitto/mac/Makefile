@@ -18,8 +18,8 @@ DIR   = $(abspath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 SQLITE_DB=$(DIR)/../../sqlite/mqtt.sqlite
 
 sql: sql_create
-	sqlite3 --box -header $(SQLITE_DB) 'select * from mqtt where id > (select max(id) from mqtt) -10 ;'
-	sqlite3 --column -header $(SQLITE_DB) 'select count(id) as "COUNT" from mqtt;'
+	@sqlite3 --box -header $(SQLITE_DB) 'select * from mqtt where id > (select max(id) from mqtt) -10 ;'
+	@sqlite3 --column -header $(SQLITE_DB) 'select count(id) as "COUNT" from mqtt;'
 
 sql_drop:
 	-sqlite3 $(SQLITE_DB) 'delete from mqtt;'
