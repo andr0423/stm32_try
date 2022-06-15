@@ -41,7 +41,7 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg,
   }
 }
 
-void example_do_connect(mqtt_client_t *client) {
+void my_do_connect(mqtt_client_t *client) {
   struct mqtt_connect_client_info_t ci;
   err_t err;
 
@@ -64,11 +64,10 @@ void example_do_connect(mqtt_client_t *client) {
   }
 }
 
-void example_publish(mqtt_client_t *client, void *arg, float *t, float *p,
+void my_publish(mqtt_client_t *client, void *arg, float *t, float *p,
     float *h) {
   size_t sz = 35;
   char message[sz];
-  //snprintf(message, sz, "{\"t\": %2.2f,\"p\": %2.2f,\"h\":%2.2f}", *t, *p, *h);
   snprintf(message, sz, "{\"t\": %2.2f,\"p\": %2.2f,\"h\":%2.2f}", *t, *p, *h);
 
 

@@ -201,9 +201,11 @@ int main(void) {
       my_oled.set_tph(ms.temperature, ms.pressure, ms.humidity);
       my_oled.display();
 
-      example_publish(client, NULL, &ms.temperature, &ms.pressure,
-          &ms.humidity);
-      example_do_connect(client);
+      my_publish(client, NULL,
+                 &ms.temperature,
+                 &ms.pressure,
+                 &ms.humidity);
+      my_do_connect(client);
 
       mb_red.off();
     }
