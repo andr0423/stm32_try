@@ -122,7 +122,8 @@ void Error_Handler(void);
 // My IP configurations
 //
 
-#define MY_MQTT_SERVER_IP_ADDRES { '1','9','2', '.', '1','6','8' , '.', '1','0','0' , '.' , '1','0','0' }
+#define MY_MQTT_SERVER_IP_ADDRES \
+    { '1','9','2', '.', '1','6','8' , '.', '1','0','0' , '.' , '1','0','0' }
 
 #define MY_IP_ADDR_0  192
 #define MY_IP_ADDR_1  168

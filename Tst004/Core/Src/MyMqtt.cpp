@@ -37,7 +37,7 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg,
     printf("mqtt_connection_cb: Disconnected, reason: %d\n", status);
 
     /* Its more nice to be connected, so try to reconnect */
-    example_do_connect(client);
+    my_do_connect(client);
   }
 }
 

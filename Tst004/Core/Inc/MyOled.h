@@ -8,9 +8,9 @@
 #ifndef SRC_MYOLED_H_
 #define SRC_MYOLED_H_
 
+#include <string>
 #include "ssd1306.h"
 #include "ssd1306_tests.h"
-#include <string>
 
 extern const char mqtt_server[15];
 extern uint8_t IP_ADDRESS[4];
@@ -28,16 +28,14 @@ class MyOled {
   void clear();
   void update();
   void write_str(uint8_t, uint8_t, const char*);
+  void write_str(uint8_t, uint8_t, const char*, FontDef *);
   void write_str(uint8_t, uint8_t, const char*, float);
-  void write_str(uint8_t, uint8_t, const char*, float, float, float);
 
   void set_display(int);
   void display_tph();
   void display_graph();
   void display_conf();
   void display_test();
-
-  //void clear_buffer();
 
 public:
   MyOled();

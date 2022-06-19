@@ -25,7 +25,8 @@ def on_message(client, userdata, msg):
             dt = j["date"]
         else:
             dt = int(datetime.datetime.timestamp(datetime.datetime.now()))
-        sql = f'insert into mqtt ("t", "p", "h", "date") values({j["t"]},{j["p"]},{j["h"]},{dt})'
+        vals = f'{j["t"]},{j["p"]},{j["h"]},{dt}'
+        sql = f'insert into mqtt ("t", "p", "h", "date") values ({vals})'
         cur.execute(sql)
         con.commit()
         print('Ok')

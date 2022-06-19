@@ -162,7 +162,7 @@ int main(void) {
   ipaddr_aton(mqtt_server, &ip_addr);
 
   if (client != NULL) {
-    example_do_connect(client);
+	  my_do_connect(client);
   }
 
   ready_flag = true;
