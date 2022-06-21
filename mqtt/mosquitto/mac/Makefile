@@ -21,8 +21,10 @@ sql: sql_create
 	@sqlite3 --box -header $(SQLITE_DB) 'select * from mqtt where id > (select max(id) from mqtt) -10 ;'
 	@sqlite3 --column -header $(SQLITE_DB) 'select count(id) as "COUNT" from mqtt;'
 
-sql_drop:
+sql_delete:
 	-sqlite3 $(SQLITE_DB) 'delete from mqtt;'
+
+sql_drop:
 	-rm -f   $(SQLITE_DB)
 
 sql_create: $(SQLITE_DB)

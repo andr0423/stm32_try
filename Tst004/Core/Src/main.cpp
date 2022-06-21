@@ -30,7 +30,6 @@
 #include <MySensor.h>
 #include <MyOled.h>
 #include <MyButton.h>
-#include <MyMeasurements.h>
 #include <MyMqtt.h>
 
 #include "dht.h"
@@ -38,6 +37,7 @@
 //mqtt
 #include <mqtt.h>
 #include <MyBlinker.h>
+#include <MyChart.h>
 #include <MyMqtt.h>
 
 /* USER CODE END Includes */
@@ -153,9 +153,6 @@ int main(void) {
   // 0.96" OLED display init and test
   my_oled.init();
   my_oled.hello();
-
-  // measurements
-  MyMeasurements arr = MyMeasurements();
 
   // mqtt
   client = mqtt_client_new();
@@ -282,9 +279,6 @@ static void MX_NVIC_Init(void) {
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
-  //my_btn.catch_click();
-  //if (ready_flag && my_btn.is_Click()) {  // ready_flag false until super circle
-
   if (ready_flag && my_btn.catch_click()) {
     if (my_btn.is_Short()) {
       my_oled.next_display();
@@ -296,7 +290,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
       }
     }
 
-    //my_btn.clean();  --> is it overkill ?
   }
 }
 

@@ -66,13 +66,17 @@ void Error_Handler(void);
 // prescale 16bit < 65536
 // 4 timer ticks per 1 ms
 // prescale = 53999
-//
-// period = 6 * 1000 * 4 = 12000
+// + divider /2  (?)
+// period = 6 * 1000 * 4 /2 = 12000
+
+//  3 sec ->  6000
+//  6 sec -> 12000
+// 10 sec -> 20000
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define MY_PERIOD 6000
+#define MY_PERIOD 20000
 #define MY_VERSION 202206110440
 #define MY_PRESCALER 53999
 #define OLED_CS_Pin GPIO_PIN_3
