@@ -39,8 +39,8 @@ class MyOled {
   void write_str(uint8_t, uint8_t, const char*);
   void write_str(uint8_t, uint8_t, const char*, FontDef *);
   void write_str(uint8_t, uint8_t, const char*, float);
-  void paint_chart( int, int, int *, int = 1 );
-  void paint_chart_dot( int, int, int *, int = 1 );
+  void paint_chart( int, int, const int *, int = 1 );
+  void paint_chart_dot( int, int, const int *, int = 1 );
 
   void set_display(int);
   void display_tph();

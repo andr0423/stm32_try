@@ -70,13 +70,14 @@ void Error_Handler(void);
 // period = 6 * 1000 * 4 /2 = 12000
 
 //  3 sec ->  6000
-//  6 sec -> 12000
+//  6 sec -> 12000 <-- vkr
 // 10 sec -> 20000
+// 12 sec -> 24000
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define MY_PERIOD 20000
+#define MY_PERIOD 12000
 #define MY_VERSION 202206110440
 #define MY_PRESCALER 53999
 #define OLED_CS_Pin GPIO_PIN_3

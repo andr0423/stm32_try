@@ -96,20 +96,20 @@ void MyOled::display_graph() {
   sprintf(this->buffer, "%2.2f  %3.2f  %2.2f", this->tmpr, this->prss, this->hmdt);
   this->write_str(2, 52, this->buffer, &Font_6x8);
 
-  //this->paint_chart(0, 128, this->t.m_point, 2);
-  //this->paint_chart(1, 128, this->p.m_point, 2);
-  //this->paint_chart(2, 128, this->h.m_point, 2);
+  //this->paint_chart(0, 128, this->t.m_point, 4);
+  //this->paint_chart(1, 128, this->p.m_point, 4);
+  //this->paint_chart(2, 128, this->h.m_point, 4);
 
-//  this->paint_chart_dot(0, 128, this->t.m_point, 4);
-//  this->paint_chart(1, 128, this->p.m_point, 4);
-//  this->paint_chart(2, 128, this->h.m_point, 4);
+  //this->paint_chart_dot(0, 128, this->t.m_point, 2);
+  //this->paint_chart_dot(1, 128, this->p.m_point, 2);
+  //this->paint_chart_dot(2, 128, this->h.m_point, 2);
 
-  this->paint_chart(0, 128, this->t.m_point);
-  this->paint_chart(1, 128, this->p.m_point);
-  this->paint_chart(2, 128, this->h.m_point);
+  this->paint_chart(0, 128, this->t.getMPoint());
+  this->paint_chart(1, 128, this->p.getMPoint());
+  this->paint_chart(2, 128, this->h.getMPoint());
 }
 
-void MyOled::paint_chart( int row, int size, int * points, int stretch ) {
+void MyOled::paint_chart( int row, int size, const int * points, int stretch ) {
     int offset = 16 * row;
     int x1 = 0;
     int y1 = 15 - points[0] + offset;
@@ -124,7 +124,7 @@ void MyOled::paint_chart( int row, int size, int * points, int stretch ) {
 
 }
 
-void MyOled::paint_chart_dot( int row, int size, int * points, int stretch ) {
+void MyOled::paint_chart_dot( int row, int size, const int * points, int stretch ) {
     for ( int x = 0 ; x < size ; x = x + stretch ){
         ssd1306_DrawPixel( x*2, ( 15 - points[x] + 16 * row ), white );
     }

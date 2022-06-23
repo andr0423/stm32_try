@@ -1,7 +1,7 @@
 /*
- * MyMeasurements.h
+ * MyChart.h
  *
- *  Created on: 27 mar 2022
+ *  Created on: 20 jun 2022
  *      Author: andrus
  */
 
@@ -10,27 +10,27 @@
 
 #include "main.h"
 
-//
 // chart height 15 px
 // chart width 128 px
 
-
 class MyChart {
-  int m_size = 128;
-  float m_mes[128] = {};
+    int m_capacity = 128;
+    float m_mes[128] = {};
+    int m_point[128] = {};
 
-  int m_first = 0;
-  int m_last = 0;
-  int m_fill = 0;
+    int m_first = 0;
+    int m_last = 0;
+    int m_size = 0;
+    bool m_full_size = false;
 
-  void chart_recalculate();
-
+    void chart_recalculate();
 public:
+    MyChart();
+    void add(float);
 
-  int m_point[128] = {};
-
-  MyChart();
-  void add(float);
+    const int* getMPoint() const {
+        return m_point;
+    }
 
 };
 

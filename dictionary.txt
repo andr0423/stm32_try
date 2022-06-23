@@ -249,3 +249,8 @@ tmpr
 prss
 arr
 px
+val
+vkr
+khm
+unfreeze
+jun

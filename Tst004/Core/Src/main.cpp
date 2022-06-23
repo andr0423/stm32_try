@@ -28,17 +28,17 @@
 /* USER CODE BEGIN Includes */
 #include <string>
 #include <MySensor.h>
-#include <MyOled.h>
 #include <MyButton.h>
+#include <MyBlinker.h>
+#include <MyOled.h>
+#include <MyChart.h>
 #include <MyMqtt.h>
 
-#include "dht.h"
+//#include "dht.h"
 
 //mqtt
 #include <mqtt.h>
-#include <MyBlinker.h>
-#include <MyChart.h>
-#include <MyMqtt.h>
+
 
 /* USER CODE END Includes */
 
@@ -172,10 +172,11 @@ int main(void) {
   //  as
   //    https://www.programmersought.com/article/78154544894/
   //
-  //  also I want to read this "Михаил: Включите D-кэш! Без него LWIP не хочет работать. За одно и I-кэш тоже..."
+  //  also I want to read this "Михаил: Включите D-кэш!
+  //  Без него LWIP не хочет работать. За одно и I-кэш тоже..."
   //    https://narodstream.ru/stm-urok-96-lan8720-lwip-tcp-client-chast-2/
   //
-  //  an this
+  //  and this
   //    https://github.com/AnielShri/STM32H745_Ethernet/blob/master/Documentation/lwip_nortos.md
   //
 
