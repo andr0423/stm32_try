@@ -8,8 +8,6 @@
 #ifndef SRC_MYMEASUREMENTS_H_
 #define SRC_MYMEASUREMENTS_H_
 
-#include "main.h"
-
 // chart height 15 px
 // chart width 128 px
 
