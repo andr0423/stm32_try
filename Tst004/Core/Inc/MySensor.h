@@ -19,17 +19,27 @@ class MySensor {
   DHT_sensor *dht;
   void init_var();
 
-public:
   float pressure_pa;
   float pressure;
   float temperature;
   float humidity;
   float temperature_dht;
   float humidity_dht;
+public:
   MySensor();
   void set_bmp(I2C_HandleTypeDef*);
   void set_dht(DHT_sensor*);
   void get_data();
+
+  float getT() const {
+    return temperature;
+  }
+  float getP() const {
+    return pressure;
+  }
+  float getH() const {
+    return humidity;
+  }
 };
 
 #endif /* SRC_MYSENSOR_H_ */

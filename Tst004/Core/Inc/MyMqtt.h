@@ -19,8 +19,8 @@ extern ip_addr_t ip_addr;
 
 void my_do_connect(mqtt_client_t *client);
 
-void my_publish(mqtt_client_t *client, void *arg, float *t, float *p,
-    float *h);
+void my_publish(mqtt_client_t *client, void *arg, float t, float p,
+    float h);
 
 class MyMqtt {
 public:

@@ -64,11 +64,11 @@ void my_do_connect(mqtt_client_t *client) {
   }
 }
 
-void my_publish(mqtt_client_t *client, void *arg, float *t, float *p,
-    float *h) {
+void my_publish(mqtt_client_t *client, void *arg, float t, float p,
+    float h) {
   size_t sz = 35;
   char message[sz];
-  snprintf(message, sz, "{\"t\": %2.2f,\"p\": %2.2f,\"h\":%2.2f}", *t, *p, *h);
+  snprintf(message, sz, "{\"t\": %2.2f,\"p\": %2.2f,\"h\":%2.2f}", t, p, h);
 
 
   err_t err;

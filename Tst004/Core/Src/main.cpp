@@ -196,13 +196,10 @@ int main(void) {
       mb_blue.toggle();
 
       ms.get_data();
-      my_oled.set_tph(ms.temperature, ms.pressure, ms.humidity);
+      my_oled.set_tph(ms.getT(), ms.getP(), ms.getH());
       my_oled.display();
 
-      my_publish(client, NULL,
-                 &ms.temperature,
-                 &ms.pressure,
-                 &ms.humidity);
+      my_publish(client, NULL, ms.getT(), ms.getP(), ms.getH());
       my_do_connect(client);
 
       mb_red.off();
