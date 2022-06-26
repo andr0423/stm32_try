@@ -254,3 +254,6 @@ vkr
 khm
 unfreeze
 jun
+за
+одно
+тоже

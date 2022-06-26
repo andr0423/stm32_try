@@ -33,7 +33,6 @@
 #include <MyOled.h>
 #include <MyChart.h>
 #include <MyMqtt.h>
-
 //#include "dht.h"
 
 //mqtt
@@ -143,10 +142,9 @@ int main(void) {
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
+  // bmp280/bme280 and dht11/dht22
   ms = MySensor();
-  // bmp280/bme280
   ms.set_bmp(&hi2c2);
-  // dht11/dht22
   //dht_22 = { DHT11_1_wire_GPIO_Port, DHT11_1_wire_Pin, DHT22, 0 };
   //ms.set_dht(&dht_22);
 
@@ -343,7 +341,7 @@ void MPU_Config(void) {
  * @retval None
  */
 void Error_Handler(void) {
-  /* USER CODE BEGINrror_Handler_Debug */
+  /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1) {

@@ -17,7 +17,6 @@ class MySensor {
   bool bme280p;  // "BME280" or "BMP280"
   bool use_dht = false;
   DHT_sensor *dht;
-  void init_var();
 
   float pressure_pa;
   float pressure;

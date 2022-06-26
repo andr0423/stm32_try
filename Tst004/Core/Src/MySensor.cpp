@@ -8,10 +8,6 @@
 #include <MySensor.h>
 
 MySensor::MySensor() {
-  this->init_var();
-}
-
-void MySensor::init_var() {
   this->pressure = 0;
   this->pressure_pa = 0;
   this->temperature = 0;
