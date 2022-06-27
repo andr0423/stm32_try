@@ -66,6 +66,7 @@ Troubles
 
 Good look
 ---------
+[more photos and videos of the prototypes](https://disk.yandex.ru/d/yaAZ7_-PIcD83w)
 
 ![MqttExplorer](./MqttExplorer2.png)
 
