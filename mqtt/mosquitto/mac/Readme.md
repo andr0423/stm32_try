@@ -6,7 +6,7 @@ Use **"brew"** for **MacOS**
  > brew search  mosquitto  
  > brew install mosquitto  
 
- > brew serives status  
+ > brew services status  
  > brew services start mosquitto  
  > brew services stop  mosquitto  
 
